@@ -51,12 +51,12 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <ProjectReference
       Include="..\..\..\Controls\src\Core\Controls.SourceGen.csproj"
       OutputItemType="Analyzer"
       ReferenceOutputAssembly="false"/>
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BlazorWebView\samples\MauiRazorClassLibrarySample\MauiRazorClassLibrarySample.csproj" />
