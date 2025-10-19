@@ -12,7 +12,7 @@ namespace Microsoft.Maui.Platform
 
 		public static IWindow GetWindow(this Gtk.Window platformWindow)
 		{
-			foreach (var window in MauiGtkApplication.Current.Application.Windows)
+			foreach (var window in MauiApplication.Current.Application.Windows)
 			{
 				if (window?.Handler?.PlatformView is Gtk.Window win && win == platformWindow)
 					return window;

@@ -1,5 +1,6 @@
 {
   "microsoft.net.sdk.android": "@MicrosoftAndroidSdkWindowsPackageVersion@/@DotNetAndroidManifestVersionBand@",
+  "microsoft.net.sdk.gtk": "@MicrosoftGtkSdkPackageVersion@/@DotNetGtkManifestVersionBand@",
   "microsoft.net.sdk.ios": "@MicrosoftiOSSdkPackageVersion@/@DotNetMaciOSManifestVersionBand@",
   "microsoft.net.sdk.maccatalyst": "@MicrosoftMacCatalystSdkPackageVersion@/@DotNetMaciOSManifestVersionBand@",
   "microsoft.net.sdk.macos": "@MicrosoftmacOSSdkPackageVersion@/@DotNetMaciOSManifestVersionBand@",

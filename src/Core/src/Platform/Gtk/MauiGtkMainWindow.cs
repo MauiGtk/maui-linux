@@ -23,12 +23,12 @@ namespace Microsoft.Maui
 
 		void OnDeleteEvent(object o, DeleteEventArgs args)
 		{
-			MauiGtkApplication.Current.Services?.InvokeLifecycleEvents<GtkLifecycle.OnDelete>(del => del(this, args));
+			MauiApplication.Current.Services?.InvokeLifecycleEvents<GtkLifecycle.OnDelete>(del => del(this, args));
 
-			if (MauiGtkApplication.Current.MainWindow == o)
+			if (MauiApplication.Current.MainWindow == o)
 			{
 
-				((Application)MauiGtkApplication.CurrentGtkApplication).Quit();
+				((Application)MauiApplication.CurrentGtkApplication).Quit();
 
 				args.Event.SendEvent = true;
 			}
@@ -37,22 +37,22 @@ namespace Microsoft.Maui
 		//GtkWidget::visibility-notify-event has been deprecated since version 3.12
 		// void OnVisibilityNotifyEvent(object o, VisibilityNotifyEventArgs args)
 		// {
-		// 	MauiGtkApplication.Current.Services?.InvokeLifecycleEvents<GtkLifecycle.OnVisibilityChanged>(del => del(this, args));
+		// 	MauiApplication.Current.Services?.InvokeLifecycleEvents<GtkLifecycle.OnVisibilityChanged>(del => del(this, args));
 		// }
 
 		void OnHidden(object? sender, EventArgs args)
 		{
-			MauiGtkApplication.Current.Services?.InvokeLifecycleEvents<GtkLifecycle.OnHidden>(del => del(this, args));
+			MauiApplication.Current.Services?.InvokeLifecycleEvents<GtkLifecycle.OnHidden>(del => del(this, args));
 		}
 
 		void OnShown(object? sender, EventArgs args)
 		{
-			MauiGtkApplication.Current.Services?.InvokeLifecycleEvents<GtkLifecycle.OnShown>(del => del(this, args));
+			MauiApplication.Current.Services?.InvokeLifecycleEvents<GtkLifecycle.OnShown>(del => del(this, args));
 		}
 
 		void OnWindowStateEvent(object o, WindowStateEventArgs args)
 		{
-			MauiGtkApplication.Current.Services?.InvokeLifecycleEvents<GtkLifecycle.OnStateChanged>(del => del(this, args));
+			MauiApplication.Current.Services?.InvokeLifecycleEvents<GtkLifecycle.OnStateChanged>(del => del(this, args));
 		}
 
 	}

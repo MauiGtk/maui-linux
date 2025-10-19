@@ -61,9 +61,9 @@
   </ItemGroup>
   <ItemGroup Condition=" '$(_MauiTargetPlatformIsGtk)' != 'True' ">
     <Compile Remove="**\*.Gtk.cs" />
-    <None Include="**\*.Gtk.cs" />
+    <None Include="**\*.Gtk.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
     <Compile Remove="**\Gtk\**\*.cs" />
-    <None Include="**\Gtk\**\*.cs" />
+    <None Include="**\Gtk\**\*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
   </ItemGroup>
   <ItemGroup Condition=" '$(_MauiTargetPlatformIsTizen)' != 'True' ">
     <Compile Remove="**\**\*.Tizen.cs" />
@@ -83,6 +83,8 @@
     <AndroidProjectFolder>Platform\Android\</AndroidProjectFolder>
     <MonoAndroidResourcePrefix>$(AndroidProjectFolder)Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>$(AndroidProjectFolder)Assets</MonoAndroidAssetsPrefix>
+    <!-- Gtk -->
+    <GtkProjectFolder>Platform\Gtk\</GtkProjectFolder>
   </PropertyGroup>
 
   <!-- Android -->

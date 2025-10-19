@@ -23,6 +23,9 @@
     <DotNetInstallCommand Condition=" '$(PRIVATE_BUILD)' == 'true' ">$(DotNetInstallCommand) --azure-feed $(InternalAzureFeed) --feed-credential $DOTNET_TOKEN</DotNetInstallCommand>
     <DotNetInstallCommand Condition=" '$(PRIVATE_BUILD)' != 'true' ">$(DotNetInstallCommand) --azure-feed $(DotNetFeedUrl)</DotNetInstallCommand>
   </PropertyGroup>
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('linux'))">
+    <!-- [TODO] -->
+  </PropertyGroup>
 
   <PropertyGroup>
     <_ProvisionDependsOn>
@@ -121,6 +124,9 @@
       <DotNetXARuntimeInstallCommand>bash '$(DotNetInstallScriptPath)' --version $(VersionFromAndroid) --install-dir '$(DotNetDirectory)' --verbose -Runtime dotnet</DotNetXARuntimeInstallCommand>
       <DotNetXMRuntimeInstallCommand>bash '$(DotNetInstallScriptPath)' --version $(VersionFromMacios) --install-dir '$(DotNetDirectory)' --verbose -Runtime dotnet</DotNetXMRuntimeInstallCommand>
     </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('linux'))">
+      <!-- [TODO] -->
+    </PropertyGroup>
   </Target>
 
   <Target Name="_InstallDotNet"
@@ -147,6 +153,7 @@
     <_PacksToRemove Include="microsoft.net.sdk.ios" />
     <_PacksToRemove Include="microsoft.net.sdk.tvos" />
     <_PacksToRemove Include="microsoft.net.sdk.macos" />
+    <_PacksToRemove Include="microsoft.net.sdk.gtk" />
     <_PacksToRemove Include="microsoft.net.workload.emscripten" />
     <_PacksToRemove Include="microsoft.net.workload.mono.toolchain" />
     <!-- Ids for 'dotnet workload install' -->
@@ -155,6 +162,7 @@
     <_WorkloadIds Include="macos" />
     <_WorkloadIds Include="ios" />
     <_WorkloadIds Include="tvos" />
+    <_WorkloadIds Include="gtk" />
     <_WorkloadIds Include="tizen" Condition=" '$(IncludeTizenTargetFrameworks)' == 'true' " />
   </ItemGroup>
 

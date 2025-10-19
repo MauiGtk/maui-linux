@@ -6,7 +6,7 @@ using Microsoft.Maui.LifecycleEvents;
 namespace Microsoft.Maui.Platform
 {
 
-	[Obsolete("use MauiGtkApplication")]
+	[Obsolete("use MauiApplication")]
 	public class MauiWindow : Window
 	{
 

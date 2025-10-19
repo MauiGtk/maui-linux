@@ -6,7 +6,7 @@
     <!-- NuGet package information -->
     <IsPackable>true</IsPackable>
     <PackageId>Microsoft.NET.Sdk.Maui.Manifest-$(DotNetMauiManifestVersionBand)</PackageId>
-    <Description>.NET Multi-platform App UI (.NET MAUI) workload manifest. Please do not reference this package directly.</Description>
+    <Description>(MauiLinux is a fork of MAUI).NET Multi-platform App UI (.NET MAUI) workload manifest. Please do not reference this package directly.</Description>
   </PropertyGroup>
 
   <Import Project="$(MauiRootDirectory)eng/ReplaceText.targets" />
@@ -46,6 +46,7 @@
       <_VersionsToReplace Include="DotNetEmscriptenManifestVersionBand" />
       <_VersionsToReplace Include="DotNetAndroidManifestVersionBand" />
       <_VersionsToReplace Include="DotNetMaciOSManifestVersionBand" />
+      <_VersionsToReplace Include="DotNetGtkManifestVersionBand" />
       <_VersionsToReplace Include="MicrosoftAspNetCoreAuthorizationPackageVersion" />
       <_VersionsToReplace Include="MicrosoftAspNetCoreComponentsAnalyzersPackageVersion" />
       <_VersionsToReplace Include="MicrosoftAspNetCoreComponentsFormsPackageVersion" />

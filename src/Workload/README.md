@@ -82,13 +82,14 @@ installed:
 
 * `maui`: everything
 * `maui-mobile`: iOS & Android
-* `maui-desktop`: Mac Catalyst & Windows
+* `maui-desktop`: Mac Catalyst & Windows & Gtk
 * `maui-core`: required by all platforms
 * `maui-android`
 * `maui-maccatalyst`
 * `maui-macos`
 * `maui-windows`
 * `maui-tizen`
+* `maui-gtk`
 
 `maui-android` simply extends the `android` workload, adding the
 Android-specific platform implementation for MAUI.
@@ -206,6 +207,7 @@ Manually remove these directories:
 * `dotnet/packs/Microsoft.macOS.*`
 * `dotnet/packs/Microsoft.Maui.*`
 * `dotnet/packs/Microsoft.tvOS.*`
+* `dotnet/packs/Microsoft.Gtk.*`
 * `dotnet/sdk/6.0.100-*`
 * `dotnet/sdk-manifests`
 * `dotnet/template-packs`

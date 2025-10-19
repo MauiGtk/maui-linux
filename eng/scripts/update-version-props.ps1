@@ -29,6 +29,10 @@ The MacCatalyst version to update on the file
 
 .PARAMETER macVersion
 
+The Gtk version to update on the file
+
+.PARAMETER gtkVersion
+
 The Mac version to update on the file
 
 .
@@ -47,7 +51,8 @@ param
     [string] $iOSVersion,
     [string] $tvOSVersion,
     [string] $macCatalystVersion,
-    [string] $macVersion
+    [string] $macVersion,
+    [string] $gtkVersion
 )
 
 #Update git config
@@ -86,11 +91,18 @@ if ($macVersion)
     $macVersionNode."#text" = $macVersion
 }
 
+if ($gtkVersion)
+{
+    $gtkVersionNode = $xmlDoc.SelectNodes("//Project//PropertyGroup//MicrosoftGtkSdkPackageVersion")[0]
+    $gtkVersionNode."#text" = $gtkVersion
+}
+
 
 Write-Output("Android version: " + $xmlDoc.Project.PropertyGroup.MicrosoftAndroidSdkWindowsPackageVersion)
 Write-Output("iOS version: " + $xmlDoc.Project.PropertyGroup.MicrosoftiOSSdkPackageVersion)
 Write-Output("tvOS version: " + $xmlDoc.Project.PropertyGroup.MicrosofttvOSSdkPackageVersion)
 Write-Output("MacCatalyst version: " + $xmlDoc.Project.PropertyGroup.MicrosoftMacCatalystSdkPackageVersion)
 Write-Output("Mac version: " + $xmlDoc.Project.PropertyGroup.MicrosoftmacOSSdkPackageVersion)
+Write-Output("Gtk version: " + $xmlDoc.Project.PropertyGroup.MicrosoftGtkSdkPackageVersion)
 
 $xmlDoc.Save($xmlFileName)

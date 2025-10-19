@@ -18,7 +18,7 @@ namespace Microsoft.Maui.Controls.Compatibility
 
 		public void BeginInvokeOnMainThread(Action action)
 		{
-			MauiGtkApplication.Invoke(action);
+			MauiApplication.Invoke(action);
 		}
 		public Assembly[] GetAssemblies()
 		{
@@ -96,7 +96,7 @@ namespace Microsoft.Maui.Controls.Compatibility
 
 		public void QuitApplication()
 		{
-			((GLib.Application)MauiGtkApplication.CurrentGtkApplication).Quit();
+			((GLib.Application)MauiApplication.CurrentGtkApplication).Quit();
 		}
 
 		public SizeRequest GetNativeSize(VisualElement view, double widthConstraint, double heightConstraint)

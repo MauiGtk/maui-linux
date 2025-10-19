@@ -7,7 +7,7 @@ using Microsoft.Maui.Hosting;
 namespace Maui.SimpleSampleApp
 {
 
-	public class SimpleSampleGtkApplication : MauiGtkApplication
+	public class SimpleSampleGtkApplication : MauiApplication
 	{
 
 		protected override MauiApp CreateMauiApp()

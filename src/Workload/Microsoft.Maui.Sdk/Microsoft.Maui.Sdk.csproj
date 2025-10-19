@@ -12,7 +12,7 @@
     <IsPackable>true</IsPackable>
     <PackageId>Microsoft.Maui.Sdk</PackageId>
     <Title>.NET MAUI SDK</Title>
-    <Description>.NET Multi-platform App UI (.NET MAUI) SDK. Please do not reference this package directly.</Description>
+    <Description>(MauiLinux is a fork of MAUI).NET Multi-platform App UI (.NET MAUI) SDK. Please do not reference this package directly.</Description>
   </PropertyGroup>
 
   <ItemGroup>

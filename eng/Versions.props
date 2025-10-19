@@ -106,5 +106,6 @@
     <DotNetAndroidManifestVersionBand>$(DotNetVersionBand)</DotNetAndroidManifestVersionBand>
     <DotNetMaciOSManifestVersionBand>$(DotNetVersionBand)</DotNetMaciOSManifestVersionBand>
     <DotNetTizenManifestVersionBand>$(DotNetVersionBand)</DotNetTizenManifestVersionBand>
+    <DotNetGtkManifestVersionBand>$(DotNetVersionBand)</DotNetGtkManifestVersionBand>
   </PropertyGroup>
 </Project>

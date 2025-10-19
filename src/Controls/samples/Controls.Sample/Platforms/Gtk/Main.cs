@@ -4,7 +4,7 @@ using Microsoft.Maui.Hosting;
 
 namespace Maui.Controls.Sample.Platform
 {
-	class Program : MauiGtkApplication
+	class Program : MauiApplication
 	{
 		protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 

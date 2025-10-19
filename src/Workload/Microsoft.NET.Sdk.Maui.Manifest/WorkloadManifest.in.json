@@ -20,7 +20,8 @@
       "description": ".NET MAUI SDK for Desktop",
       "extends": [ 
         "maui-maccatalyst",
-        "maui-windows"
+        "maui-windows",
+        "maui-gtk"
       ]
     },
     "maui-core": {
@@ -83,6 +84,13 @@
       "description": ".NET MAUI SDK for Tizen",
       "extends": [
         "maui-blazor"
+      ]
+    },
+    "maui-gtk": {
+      "description": ".NET MAUI SDK for Gtk",
+      "extends": [
+        "maui-blazor",
+        "gtk"
       ]
     }
   },
