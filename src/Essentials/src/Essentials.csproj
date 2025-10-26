@@ -71,6 +71,9 @@
     <Compile Include="**\*.Gtk.*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GtkBuildSettings.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="GdkSharp" Version="3.24.24.95" />
     <PackageReference Include="GtkSharp" Version="3.24.24.95" />
   </ItemGroup>
