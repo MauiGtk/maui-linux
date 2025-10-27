@@ -70,6 +70,10 @@
     <Compile Include="**\*.Gtk.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
     <Compile Include="**\*.Gtk.*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="GdkSharp" Version="3.24.24.95" />
+    <PackageReference Include="GtkSharp" Version="3.24.24.95" />
+  </ItemGroup>
   <!-- <ItemGroup Condition=" '$(TargetPlatformIdentifier)' == 'macos' ">
     <Compile Include="**\*.macos.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
     <Compile Include="**\*.macos.*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
