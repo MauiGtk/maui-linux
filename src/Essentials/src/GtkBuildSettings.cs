@@ -14,7 +14,7 @@ namespace Microsoft.Maui
 	/// as embedded resource namespaces and resource behaviors for images, fonts, splash screens, and assets.</remarks>
 	public static class GtkBuildSettings
 	{
-		private static Assembly entryAssembly = null;
+		static Assembly entryAssembly = null;
 		/// <summary>
 		/// Gets the entry assembly for the current application domain.
 		/// </summary>
@@ -31,7 +31,7 @@ namespace Microsoft.Maui
 		}
 
 
-		private static Type gtkBuildSettingsType = null;
+		static Type gtkBuildSettingsType = null;
 		/// <summary>
 		/// Gets the <see cref="Type"/> representing the GTK build settings.
 		/// </summary>
@@ -49,7 +49,7 @@ namespace Microsoft.Maui
 		}
 
 
-		private static string? _mauiEmbededResourceNamespace = null;
+		static string? _mauiEmbededResourceNamespace = null;
 		/// <summary>
 		/// Gets the default namespace used for MauiAssets/MauiImages/MauiFonts in a Maui application.
 		/// </summary>
@@ -75,7 +75,7 @@ namespace Microsoft.Maui
 			}
 		}
 
-		private static string? _mauiGTKNamespace = null;
+		static string? _mauiGTKNamespace = null;
 		/// <summary>
 		/// Gets the default namespace used for MauiAssets/MauiImages/MauiFonts in a Maui application.
 		/// </summary>
@@ -101,7 +101,7 @@ namespace Microsoft.Maui
 			}
 		}
 
-		private static string? _mauiGTKDefaultDirectory = null;
+		static string? _mauiGTKDefaultDirectory = null;
 		/// <summary>
 		/// Gets the default directory path for MauiAssets/MauiImages/MauiFonts in a Maui GTK application.
 		/// </summary>
@@ -127,7 +127,7 @@ namespace Microsoft.Maui
 			}
 		}
 
-		private static MauiResourceBehavior? _mauiImageBehavior = null;
+		static MauiResourceBehavior? _mauiImageBehavior = null;
 		/// <summary>
 		/// Gets the behavior for handling Maui image resources.
 		/// </summary>
@@ -153,7 +153,7 @@ namespace Microsoft.Maui
 			}
 		}
 
-		private static MauiResourceBehavior? _mauiFontBehavior = null;
+		static MauiResourceBehavior? _mauiFontBehavior = null;
 		/// <summary>
 		/// Gets the behavior for handling Maui fonts in the application.
 		/// </summary>
@@ -179,7 +179,7 @@ namespace Microsoft.Maui
 			}
 		}
 
-		private static MauiResourceBehavior? _mauiSplashBehavior = null;
+		static MauiResourceBehavior? _mauiSplashBehavior = null;
 		/// <summary>
 		/// Gets the behavior for handling Maui splash resources.
 		/// </summary>
@@ -205,7 +205,7 @@ namespace Microsoft.Maui
 			}
 		}
 
-		private static MauiResourceBehavior? _mauiAssetBehavior = null;
+		static MauiResourceBehavior? _mauiAssetBehavior = null;
 		/// <summary>
 		/// Gets the behavior for handling Maui assets in the application.
 		/// </summary>

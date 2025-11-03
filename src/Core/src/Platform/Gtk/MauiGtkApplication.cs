@@ -135,7 +135,7 @@ namespace Microsoft.Maui
 		}
 
 		#region Splash Screen
-		private int GetScaleFactor()
+		int GetScaleFactor()
 		{
 			try
 			{
@@ -156,14 +156,14 @@ namespace Microsoft.Maui
 			}
 		}
 
-		private (Assembly?, string?) GetSplashResource()
+		(Assembly?, string?) GetSplashResource()
 		{
 			if (GtkBuildSettings.MauiSplashBehavior == GtkBuildSettings.MauiResourceBehavior.CopyFiles)	return (null, null);
 
 			return Storage.FileSystemUtils.GetMauiRessource(Storage.FileSystemUtils.MauiResourceType.MauiSplashScreen, null, GetScaleFactor());
 		}
 
-		private string? GetSplashImagePath()
+		string? GetSplashImagePath()
 		{
 			if (GtkBuildSettings.MauiImageBehavior != GtkBuildSettings.MauiResourceBehavior.CopyFiles)
 				return default;
