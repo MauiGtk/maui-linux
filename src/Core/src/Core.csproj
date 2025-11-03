@@ -26,6 +26,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Microsoft.Extensions.Logging" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="WebkitGtkSharp" Version="3.24.24.95" />
     <ProjectReference Include="..\..\Graphics\src\Graphics\Graphics.csproj" />
     <PackageReference Include="System.Numerics.Vectors" Condition="$(TargetFramework.StartsWith('netstandard'))" />
   </ItemGroup>
@@ -75,32 +76,14 @@
 
   <Import Project="$(MauiRootDirectory)eng/ReplaceText.targets" />
 
-  <Target Name="_GenerateBundledVersions"
-    BeforeTargets="Build;AssignTargetPaths"
-    DependsOnTargets="SetVersions"
-    Inputs="$(MSBuildProjectFile);$(MauiRootDirectory)eng\Versions.props;nuget\buildTransitive\GtkSharp.Maui.Core.BundledVersions.in.targets"
-    Outputs="$(IntermediateOutputPath)GtkSharp.Maui.Core.BundledVersions.targets">
+  <Target Name="_GenerateBundledVersions" BeforeTargets="Build;AssignTargetPaths" DependsOnTargets="SetVersions" Inputs="$(MSBuildProjectFile);$(MauiRootDirectory)eng\Versions.props;nuget\buildTransitive\GtkSharp.Maui.Core.BundledVersions.in.targets" Outputs="$(IntermediateOutputPath)GtkSharp.Maui.Core.BundledVersions.targets">
     <ItemGroup>
       <_ValuesToReplace Include="VERSION" PropertyName="PackageReferenceVersion" />
     </ItemGroup>
-    <Copy
-      SourceFiles="nuget\buildTransitive\GtkSharp.Maui.Core.BundledVersions.in.targets"
-      DestinationFiles="$(IntermediateOutputPath)GtkSharp.Maui.Core.BundledVersions.targets"
-      />
-    <ReplaceText
-      Input="$(IntermediateOutputPath)GtkSharp.Maui.Core.BundledVersions.targets"
-      Output="$(IntermediateOutputPath)GtkSharp.Maui.Core.BundledVersions.targets"
-      OldValue="@%(_ValuesToReplace.Identity)@"
-      NewValue="$(%(_ValuesToReplace.PropertyName))"
-      />
+    <Copy SourceFiles="nuget\buildTransitive\GtkSharp.Maui.Core.BundledVersions.in.targets" DestinationFiles="$(IntermediateOutputPath)GtkSharp.Maui.Core.BundledVersions.targets" />
+    <ReplaceText Input="$(IntermediateOutputPath)GtkSharp.Maui.Core.BundledVersions.targets" Output="$(IntermediateOutputPath)GtkSharp.Maui.Core.BundledVersions.targets" OldValue="@%(_ValuesToReplace.Identity)@" NewValue="$(%(_ValuesToReplace.PropertyName))" />
     <ItemGroup>
-      <None
-        Include="$(IntermediateOutputPath)GtkSharp.Maui.Core.BundledVersions.targets"
-        Link="nuget\buildTransitive\GtkSharp.Maui.Core.BundledVersions.targets"
-        Pack="true"
-        PackagePath="buildTransitive"
-        Visible="false"
-        />
+      <None Include="$(IntermediateOutputPath)GtkSharp.Maui.Core.BundledVersions.targets" Link="nuget\buildTransitive\GtkSharp.Maui.Core.BundledVersions.targets" Pack="true" PackagePath="buildTransitive" Visible="false" />
       <FileWrites Include="$(IntermediateOutputPath)GtkSharp.Maui.Core.BundledVersions.targets" />
     </ItemGroup>
   </Target>
