@@ -75,7 +75,7 @@ namespace Microsoft.Maui.Controls.Platform
 
 			void OnPromptRequested(Page sender, PromptArguments arguments)
 			{
-				throw new NotImplementedException();
+				DialogHelper.ShowPromptDialog(PlatformWindow, arguments);
 			}
 
 			void OnActionSheetRequested(Page sender, ActionSheetArguments arguments)
