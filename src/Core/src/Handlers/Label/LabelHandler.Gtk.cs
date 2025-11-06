@@ -70,6 +70,7 @@ namespace Microsoft.Maui.Handlers
 		{
 			var fontManager = handler.GetRequiredService<IFontManager>();
 
+			// GTK does not support FontAttributes in the FontFamily name, so we need to extract them here
 			var property = label.GetType().GetProperty("FontAttributes");
 			var fontAttributes = property?.GetValue(label);
 
