@@ -1,9 +1,16 @@
 using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using Gdk;
 using Gtk;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Dispatching;
 using Microsoft.Maui.Hosting;
 using Microsoft.Maui.LifecycleEvents;
+using Pango;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Microsoft.Maui
 {
@@ -63,7 +70,7 @@ namespace Microsoft.Maui
 
 		protected void OnActivated(object sender, EventArgs args)
 		{
-			StartupLauch(sender, args);
+			StartupLaunch(sender, args);
 
 			Services?.InvokeLifecycleEvents<GtkLifecycle.OnApplicationActivated>(del => del(CurrentGtkApplication, args));
 		}
@@ -90,7 +97,7 @@ namespace Microsoft.Maui
 			// future use: to have notifications at cross platform Window level
 		}
 
-		protected void StartupLauch(object sender, EventArgs args)
+		protected void StartupLaunch(object sender, EventArgs args)
 		{
 			IPlatformApplication.Current = this;
 
@@ -126,5 +133,49 @@ namespace Microsoft.Maui
 
 			((GLib.Application)app).Run();
 		}
+
+		#region Splash Screen
+		int GetScaleFactor()
+		{
+			try
+			{
+				var display = Gdk.Display.Default;
+				if (display == null)
+					return 1;
+
+				var monitor = display.PrimaryMonitor;
+				if (monitor == null) monitor = display.GetMonitor(0); // Fallback in my Dev Env PrimaryMonitor is null
+
+				if (monitor == null) return 1;
+
+				return monitor.ScaleFactor; // 1, 2, …
+			}
+			catch
+			{
+				return 1;
+			}
+		}
+
+		(Assembly?, string?) GetSplashResource()
+		{
+			if (GtkBuildSettings.MauiSplashBehavior == GtkBuildSettings.MauiResourceBehavior.CopyFiles)	return (null, null);
+
+			return Storage.FileSystemUtils.GetMauiRessource(Storage.FileSystemUtils.MauiResourceType.MauiSplashScreen, null, GetScaleFactor());
+		}
+
+		string? GetSplashImagePath()
+		{
+			if (GtkBuildSettings.MauiImageBehavior != GtkBuildSettings.MauiResourceBehavior.CopyFiles)
+				return default;
+
+			var filePath = Storage.FileSystemUtils.GetFilePath(Storage.FileSystemUtils.MauiResourceType.MauiSplashScreen);
+
+			if (filePath != null && File.Exists(filePath))
+				return filePath;
+
+			return default;
+		}
+
+		#endregion Splash Screen
 	}
 }

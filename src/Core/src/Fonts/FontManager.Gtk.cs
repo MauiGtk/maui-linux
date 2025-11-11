@@ -7,59 +7,7 @@ using Pango;
 using static Microsoft.Maui.GtkInterop.DllImportFontConfig;
 
 namespace Microsoft.Maui
-{
-
-	// see: https://docs.gtk.org/Pango/struct.FontDescription.html
-	/*
-	  public enum Pango.Weight
-	  {
-	    Thin = 100, // 0x00000064
-	    Ultralight = 200, // 0x000000C8
-	    Light = 300, // 0x0000012C
-	    Semilight = 350, // 0x0000015E
-	    Book = 380, // 0x0000017C
-	    Normal = 400, // 0x00000190
-	    Medium = 500, // 0x000001F4
-	    Semibold = 600, // 0x00000258
-	    Bold = 700, // 0x000002BC
-	    Ultrabold = 800, // 0x00000320
-	    Heavy = 900, // 0x00000384
-	    Ultraheavy = 1000, // 0x000003E8
-	  }
-	  
-	  public enum Stretch
-	  {
-	    UltraCondensed,
-	    ExtraCondensed,
-	    Condensed,
-	    SemiCondensed,
-	    Normal,
-	    SemiExpanded,
-	    Expanded,
-	    ExtraExpanded,
-	    UltraExpanded,
-	  }
-  
-  
-    public enum Style { Normal, Oblique,  Italic  }
-  
-    public enum Variant
-  {
-    Normal,
-    SmallCaps,
-  }
-  
-    public enum Gravity
-  {
-    South,
-    East,
-    North,
-    West,
-    Auto,
-  }
-  
-	 */
-
+{ 
 	public class FontManager : IFontManager
 	{
 
@@ -85,8 +33,18 @@ namespace Microsoft.Maui
 
 		public double DefaultFontSize => _defaultFontSize ??= DefaultFontFamily?.GetSize() ?? 0;
 
-		public FontDescription GetFontFamily(Font font) =>
-			font == default ? SystemContext.FontDescription : font.ToFontDescription();
+		public FontDescription GetFontFamily(Font font)
+		{
+			if (font != default)
+			{
+				if(!string.IsNullOrWhiteSpace(font.Family)) _fontRegistrar.GetFont(font.Family);
+				return font.ToFontDescription();
+			}
+			else
+			{
+				return SystemContext.FontDescription;
+			}
+		}
 
 		public double GetFontSize(Font font)
 		{

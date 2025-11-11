@@ -70,6 +70,23 @@ namespace Microsoft.Maui.Handlers
 		{
 			var fontManager = handler.GetRequiredService<IFontManager>();
 
+			// GTK does not support FontAttributes in the FontFamily name, so we need to extract them here
+			var property = label.GetType().GetProperty("FontAttributes");
+			var fontAttributes = property?.GetValue(label);
+
+			if (fontAttributes != null && (int)fontAttributes == 0 && !string.IsNullOrWhiteSpace(label.Font.Family)) //0 means FontAttributes.None
+			{
+				if (label.Font.Family.Contains("bold", StringComparison.InvariantCultureIgnoreCase))
+				{
+					property!.SetValue(label, 1 << 0); //0001 means FontAttributes.Bold
+				}
+				
+				if (label.Font.Family.Contains("italic", StringComparison.InvariantCultureIgnoreCase))
+				{
+					property!.SetValue(label, 1 << 1); //0010 means FontAttributes.Italic
+				}
+			}
+
 			handler.PlatformView?.UpdateFont(label, fontManager);
 		}
 

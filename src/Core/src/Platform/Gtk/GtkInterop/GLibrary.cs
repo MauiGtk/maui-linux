@@ -34,6 +34,7 @@ namespace Microsoft.Maui.GtkInterop
 			_libraryDefinitions[Library.Fontconfig] = new[] { "fontconfig.dll", "libfontconfig.so.1", "libfontconfig.1.dylib", "fontconfig.dll" };
 			// <dllmap os="!windows,osx" dll="libwebkitgtk-3.0-0.dll" target="libwebkitgtk-3.0.so.0"/> <dllmap os="osx" dll="libwebkitgtk-3.0-0.dll" target="libwebkitgtk-3.0.0.dylib"/>
 			_libraryDefinitions[Library.Webkit] = new[] { "libwebkitgtk-3.0-0.dll", "libwebkitgtk-3.0.so.0", "libwebkitgtk-3.0.0.dylib", "libwebkitgtk-3.dll" };
+			_libraryDefinitions[Library.PangoFt] = new[] { "libpangoft2-1.0-0.dll", "libpangoft2-1.0.so.0", "libpangoft2-1.0.0.dylib", "pangoft2-1.dll" };
 		}
 
 		public static IntPtr Load(Library library)

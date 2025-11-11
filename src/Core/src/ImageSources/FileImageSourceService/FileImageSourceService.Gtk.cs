@@ -3,9 +3,11 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Storage;
 using NativeImage = Gdk.Pixbuf;
 
 namespace Microsoft.Maui
@@ -23,40 +25,48 @@ namespace Microsoft.Maui
 				return FromResult(null);
 
 			var filename = imageSource.File;
-
-			NativeImage? TryLoadFile(string file)
+			
+			NativeImage? TryLoadFile()
 			{
-				if (File.Exists(file))
+				if (File.Exists(filename))
 					return new NativeImage(filename);
 
-				return null;
+				if (GtkBuildSettings.MauiImageBehavior !=  GtkBuildSettings.MauiResourceBehavior.CopyFiles) return default;
+
+				var filePath = FileSystemUtils.GetFilePath(FileSystemUtils.MauiResourceType.MauiImage, filename, scale);
+
+				if (filePath != null && File.Exists(filePath))
+					return new NativeImage(filePath);
+
+				filePath = FileSystemUtils.GetFilePath(FileSystemUtils.MauiResourceType.MauiImage, filename, scale);
+				
+				if (filePath != null && File.Exists(filePath))
+					return new NativeImage(filePath);
+				
+				return default;
 			}
 
-			NativeImage? TryLoadResource(string file)
+			NativeImage? TryLoadEmbededMauiImage()
 			{
-				foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-				{
-					var names = assembly.GetManifestResourceNames();
-					var res = names.FirstOrDefault(r => r.EndsWith($".{file}"));
+				if (GtkBuildSettings.MauiImageBehavior != GtkBuildSettings.MauiResourceBehavior.EmbedFiles)	return default;
 
-					if (res != null)
-					{
-						return new(assembly, res);
-					}
+				var (assembly, resourceName) = FileSystemUtils.GetMauiRessource(FileSystemUtils.MauiResourceType.MauiImage, filename, scale);
+
+				if (assembly != null && !string.IsNullOrWhiteSpace(resourceName))
+				{
+					return new(assembly, resourceName);
 				}
 
 				return default;
-
 			}
 
 			try
 			{
-				var image = TryLoadFile(filename);
+				var image = TryLoadFile();
 
 				if (image == null)
 				{
-					image = TryLoadResource(filename);
-
+					image = TryLoadEmbededMauiImage();
 				}
 
 				if (image == null)
@@ -77,6 +87,7 @@ namespace Microsoft.Maui
 		static Task<IImageSourceServiceResult<NativeImage>?> FromResult(IImageSourceServiceResult<NativeImage>? result) =>
 			Task.FromResult(result);
 
+		
 	}
 
 }

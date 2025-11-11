@@ -2,8 +2,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Cairo;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Graphics;
+using Pango;
 using NativeImage = Gdk.Pixbuf;
 
 
@@ -43,28 +45,41 @@ namespace Microsoft.Maui
 
 		internal NativeImage RenderImage(IFontImageSource imageSource, float scale)
 		{
-			throw new NotImplementedException();
-			// var font = FontManager.GetFont(imageSource.Font);
-			// var color = (imageSource.Color ?? Colors.White).ToNative();
-			// var glyph = (NSString)imageSource.Glyph;
-			//
-			// var attString = new NSAttributedString(glyph, font, color);
-			// var imagesize = glyph.GetSizeUsingAttributes(attString.GetUIKitAttributes(0, out _));
-			//
-			// UIGraphics.BeginImageContextWithOptions(imagesize, false, scale);
-			// var ctx = new NSStringDrawingContext();
-			//
-			// var boundingRect = attString.GetBoundingRect(imagesize, 0, ctx);
-			// attString.DrawString(new CGRect(
-			// 	imagesize.Width / 2 - boundingRect.Size.Width / 2,
-			// 	imagesize.Height / 2 - boundingRect.Size.Height / 2,
-			// 	imagesize.Width,
-			// 	imagesize.Height));
-			//
-			// var image = UIGraphics.GetImageFromCurrentImageContext();
-			// UIGraphics.EndImageContext();
-			//
-			// return image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal);
+			var fontManager = FontManager;
+
+			var fontDescription = fontManager.GetFontFamily(imageSource.Font);
+			
+			var fontSize = fontManager.GetFontSize(imageSource.Font);
+
+			var color = imageSource.Color ?? Colors.White;
+
+			var width = (int)(fontSize * scale);
+			var height = (int)(fontSize * scale);
+
+			using (var surface = new ImageSurface(Format.ARGB32, width, height))
+			using (var context = new Cairo.Context(surface))
+			{
+				context.SetSourceRGBA(1, 1, 1, 0);
+				context.Paint();
+				
+				var layout = CairoHelper.CreateLayout(context);
+
+				layout.FontDescription = fontDescription;
+				
+				layout.SetText(imageSource.Glyph);
+				
+				layout.GetPixelSize(out int textWidth, out int textHeight);
+				double x = (width - textWidth) / 2.0;
+				double y = (height - textHeight) / 2.0;
+				context.MoveTo(x, y);
+
+				context.SetSourceRGBA(color.Red, color.Green, color.Blue, color.Alpha);
+				
+				CairoHelper.ShowLayout(context, layout);
+
+				return new NativeImage(surface, 0, 0, width, height);
+			}
 		}
+
 	}
 }
