@@ -23,7 +23,14 @@ namespace Microsoft.Maui.Handlers
 
 			var platformContent = window.Content.ToPlatform(handler.MauiContext);
 
-			handler.PlatformView.Child = platformContent;
+			if (platformContent.Parent != null && platformContent.Parent is EventBoxWrapperView)
+			{
+				handler.PlatformView.Child = platformContent.Parent;
+			}
+			else
+			{
+				handler.PlatformView.Child = platformContent;
+			}
 		}
 
 		public static void MapRequestDisplayDensity(IWindowHandler handler, IWindow window, object? args)

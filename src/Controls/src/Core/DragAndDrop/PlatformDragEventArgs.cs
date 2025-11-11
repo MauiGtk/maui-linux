@@ -1,4 +1,5 @@
 ﻿using System;
+using Gtk;
 namespace Microsoft.Maui.Controls;
 
 /// <summary>
@@ -86,6 +87,35 @@ public class PlatformDragEventArgs
 	{
 		Sender = sender;
 		DragEventArgs = dragEventArgs;
+	}
+
+#elif GTK
+
+	/// <summary>
+	/// Gets the native view attached to the event.
+	/// </summary>
+	public object Sender { get; }
+
+	/// <summary>
+	/// Gets data for drag and drop events.
+	/// </summary>
+	public DragMotionArgs? DragMotionArgs { get; }
+
+	/// <summary>
+	/// Gets data for drag and drop events.
+	/// </summary>
+	public DragLeaveArgs? DragLeaveArgs { get; }
+
+	internal PlatformDragEventArgs(object sender, DragMotionArgs dragMotionArgs)
+	{
+		Sender = sender;
+		DragMotionArgs = dragMotionArgs;
+	}
+
+	internal PlatformDragEventArgs(object sender, DragLeaveArgs dragLeaveArgs)
+	{
+		Sender = sender;
+		DragLeaveArgs = dragLeaveArgs;
 	}
 
 #else

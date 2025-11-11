@@ -25,7 +25,15 @@ namespace Microsoft.Maui.Platform
 				else if (value != null)
 				{
 					//PackStart(value, true, false, 0);
-					Child = value;
+
+					if (value.Parent is EventBoxWrapperView)
+					{
+						Child = value.Parent;
+					}
+					else
+					{ 
+						Child = value;
+					}
 					Child.Expand = true;
 				}
 

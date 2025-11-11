@@ -8,7 +8,7 @@ public class GtkGraphicsView : global::Gtk.DrawingArea
 
 	public GtkGraphicsView()
 	{
-		// AppPaintable = true;
+		//AppPaintable = true;
 		// VisibleWindow = false;
 	}
 

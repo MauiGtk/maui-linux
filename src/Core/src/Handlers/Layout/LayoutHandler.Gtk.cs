@@ -3,6 +3,7 @@ using Gtk;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Layouts;
 using Microsoft.Maui.Platform;
+//using Microsoft.Maui.Platform.Gtk;
 
 namespace Microsoft.Maui.Handlers
 {
@@ -33,7 +34,16 @@ namespace Microsoft.Maui.Handlers
 			foreach (var child in VirtualView)
 			{
 				if (child.ToPlatform(MauiContext) is { } nativeChild)
-					PlatformView.Add(child, nativeChild);
+				{
+					if (nativeChild.Parent is EventBoxWrapperView && nativeChild.Parent != null)
+					{
+						PlatformView.Add(child, nativeChild.Parent);
+					}
+					else
+					{
+						PlatformView.Add(child, nativeChild);
+					}
+				}
 			}
 
 			PlatformView.QueueAllocate();
@@ -53,7 +63,16 @@ namespace Microsoft.Maui.Handlers
 			_ = MauiContext ?? throw new InvalidOperationException($"{nameof(MauiContext)} should have been set by base class.");
 
 			if (child.ToPlatform(MauiContext) is { } nativeChild)
-				PlatformView.Add(child, nativeChild);
+			{
+				if (nativeChild.Parent != null && nativeChild.Parent is EventBoxWrapperView)
+				{
+					PlatformView.Add(child, nativeChild.Parent);
+				}
+				else
+				{
+					PlatformView.Add(child, nativeChild);
+				}
+			}
 
 			PlatformView.QueueAllocate();
 		}
@@ -65,7 +84,16 @@ namespace Microsoft.Maui.Handlers
 			_ = MauiContext ?? throw new InvalidOperationException($"{nameof(MauiContext)} should have been set by base class.");
 
 			if (child.ToPlatform(MauiContext) is { } nativeChild)
-				PlatformView.Remove(nativeChild);
+			{
+				if (nativeChild.Parent != null && nativeChild.Parent is EventBoxWrapperView)
+				{
+					PlatformView.Remove(nativeChild.Parent);
+				}
+				else
+				{
+					PlatformView.Remove(nativeChild);
+				}
+			}
 
 			PlatformView.QueueAllocate();
 		}
@@ -82,7 +110,16 @@ namespace Microsoft.Maui.Handlers
 			_ = MauiContext ?? throw new InvalidOperationException($"{nameof(MauiContext)} should have been set by base class.");
 
 			if (child.ToPlatform(MauiContext) is { } nativeChild)
-				PlatformView.Insert(child, nativeChild, index);
+			{
+				if (nativeChild.Parent != null && nativeChild.Parent is EventBoxWrapperView)
+				{
+					PlatformView.Insert(child, nativeChild.Parent, index);
+				}
+				else
+				{
+					PlatformView.Insert(child, nativeChild, index);
+				}
+			}
 
 			PlatformView.QueueAllocate();
 		}
@@ -94,7 +131,16 @@ namespace Microsoft.Maui.Handlers
 			_ = MauiContext ?? throw new InvalidOperationException($"{nameof(MauiContext)} should have been set by base class.");
 
 			if (child.ToPlatform(MauiContext) is { } nativeChild)
-				PlatformView.Update(child, nativeChild, index);
+			{
+				if (nativeChild.Parent != null && nativeChild.Parent.Parent is EventBoxWrapperView)
+				{
+					PlatformView.Update(child, nativeChild.Parent, index);
+				}
+				else
+				{
+					PlatformView.Update(child, nativeChild, index);
+				}
+			}
 
 			PlatformView.QueueAllocate();
 		}

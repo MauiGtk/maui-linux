@@ -1,4 +1,5 @@
 ﻿using System;
+using Gtk;
 
 namespace Microsoft.Maui.Controls;
 
@@ -169,6 +170,23 @@ public class PlatformDragStartingEventArgs
 	{
 		Sender = sender;
 		DragStartingEventArgs = dragStartingEventArgs;
+	}
+
+#elif GTK
+	/// <summary>
+	/// Gets the native view attached to the event.
+	/// </summary>
+	public object Sender { get; }
+
+	/// <summary>
+	/// Gets data for the DragStarting event.
+	/// </summary>
+	public DragBeginArgs DragBeginArgs { get; }
+
+	internal PlatformDragStartingEventArgs(object sender, DragBeginArgs dragBeginArgs)
+	{
+		Sender = sender;
+		DragBeginArgs = dragBeginArgs;
 	}
 
 #else

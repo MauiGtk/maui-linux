@@ -30,6 +30,11 @@ namespace Microsoft.Maui.Handlers
 			};
 		}
 
+		public override bool NeedsContainer => VirtualView?.Background != null ||
+			(VirtualView != null && VirtualView.VerticalTextAlignment != TextAlignment.Start) ||
+			base.NeedsContainer;
+
+
 		public override Size GetDesiredSize(double widthConstraint, double heightConstraint)
 		{
 			if (PlatformView is not { } platformView)
