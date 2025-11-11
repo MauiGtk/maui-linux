@@ -10,10 +10,15 @@
     <NoWarn>$(NoWarn);CA1307;CA1309;CS8603;CS8618;CS0162</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="CairoSharp" Version="3.24.24.95" />
+    <PackageReference Include="GdkSharp" Version="3.24.24.95" />
+    <PackageReference Include="PangoSharp" Version="3.24.24.95" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Graphics\Graphics.csproj" />
   </ItemGroup>
-  <ItemGroup Condition="$(TargetFramework.Contains('-gtk')) != 'true'">
-    <PackageReference Include="GtkSharp" />
+  <ItemGroup>
+    <PackageReference Include="GtkSharp" Version="3.24.24.95" />
   </ItemGroup>
 
 </Project>

@@ -145,5 +145,102 @@ namespace Microsoft.Maui.Controls.Platform
 
 			return type;
 		}
+
+		public static void ShowPromptDialog(Gtk.Window platformWindow, PromptArguments promptArguments)
+		{
+			var dialog = new Gtk.Dialog(
+				promptArguments.Title,
+				platformWindow,
+				Gtk.DialogFlags.Modal
+			);
+
+			dialog.AddButton(promptArguments.Cancel ?? "Cancel", ResponseType.Cancel);
+			dialog.AddButton(promptArguments.Accept ?? "OK", ResponseType.Ok);
+
+			dialog.DefaultResponse = ResponseType.Ok;
+
+			var box = dialog.ContentArea;
+			var label = new Gtk.Label(promptArguments.Message ?? string.Empty) { Xalign = 0f };
+			var entry = new Gtk.Entry();
+
+			if (!string.IsNullOrEmpty(promptArguments.Placeholder))
+				entry.PlaceholderText = promptArguments.Placeholder;
+
+			if (!string.IsNullOrEmpty(promptArguments.InitialValue))
+			{
+				entry.Text = promptArguments.InitialValue;
+				try
+				{
+					entry.SelectRegion(0, entry.TextLength);
+				}
+				catch { /* ignore if not supported */ }
+			}
+
+			if (promptArguments.MaxLength > -1)
+				entry.MaxLength = promptArguments.MaxLength;
+
+			ApplyKeyboard(entry, promptArguments.Keyboard);
+			entry.ActivatesDefault = true;
+
+			// Add widgets to dialog content area
+			box.PackStart(label, false, false, 6);
+			box.PackStart(entry, false, false, 6);
+
+			// Handle dialog response
+			dialog.Response += (o, args) =>
+			{
+				string? text = null;
+				if (args.ResponseId == ResponseType.Ok)
+					text = entry.Text;
+
+				promptArguments.SetResult(text);
+
+				dialog.Destroy();
+			};
+
+			// Handle closing via window "X" button
+			dialog.DeleteEvent += (o, e) =>
+			{
+				promptArguments.SetResult(null);
+				dialog.Destroy();
+			};
+
+			dialog.ShowAll();
+		}
+
+		private static void ApplyKeyboard(Gtk.Entry entry, Keyboard keyboard)
+		{
+			keyboard = keyboard ?? Keyboard.Default;
+
+			entry.Visibility = true;
+			entry.InputHints = InputHints.None;
+			entry.InputPurpose = InputPurpose.FreeForm;
+						
+			// Map MAUI keyboard types to GTK input purposes
+			if (keyboard == Keyboard.Email)
+			{
+				entry.InputPurpose = InputPurpose.Email;
+			}
+			else if (keyboard == Keyboard.Telephone)
+			{
+				entry.InputPurpose = InputPurpose.Phone;
+			}
+			else if (keyboard == Keyboard.Numeric)
+			{
+				entry.InputPurpose = InputPurpose.Number;
+			}
+			else if (keyboard == Keyboard.Url)
+			{
+				entry.InputPurpose = InputPurpose.Url;
+			}
+			else if (keyboard == Keyboard.Chat)
+			{
+				entry.InputPurpose = InputPurpose.FreeForm;
+			}
+			else if (keyboard == Keyboard.Text || keyboard == Keyboard.Default || keyboard == Keyboard.Plain)
+			{
+				entry.InputPurpose = InputPurpose.FreeForm;
+			}
+		}
 	}
 }
