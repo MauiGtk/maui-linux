@@ -24,14 +24,22 @@ namespace Microsoft.Maui.Controls
 			if (_first is null || _first.Value.Key == specificity)
 			{
 				_first = new KeyValuePair<SetterSpecificity, object>(specificity, value);
-				_values?[specificity] = value;
+
+				if (_values != null)
+				{
+					_values[specificity] = value;
+				}
 				return;
 			}
 
 			if (_second is null || _second.Value.Key == specificity)
 			{
 				_second = new KeyValuePair<SetterSpecificity, object>(specificity, value);
-				_values?[specificity] = value;
+
+				if (_values != null)
+				{
+					_values[specificity] = value;
+				}
 				return;
 			}
 
