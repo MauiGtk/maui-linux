@@ -35,7 +35,7 @@ namespace Microsoft.Maui.Handlers
 			{
 				if (child.ToPlatform(MauiContext) is { } nativeChild)
 				{
-					if (nativeChild.Parent is EventBoxWrapperView && nativeChild.Parent != null)
+					if (nativeChild.Parent is WrapperView && nativeChild.Parent != null)
 					{
 						PlatformView.Add(child, nativeChild.Parent);
 					}
@@ -64,7 +64,7 @@ namespace Microsoft.Maui.Handlers
 
 			if (child.ToPlatform(MauiContext) is { } nativeChild)
 			{
-				if (nativeChild.Parent != null && nativeChild.Parent is EventBoxWrapperView)
+				if (nativeChild.Parent != null && nativeChild.Parent is WrapperView)
 				{
 					PlatformView.Add(child, nativeChild.Parent);
 				}
@@ -85,7 +85,7 @@ namespace Microsoft.Maui.Handlers
 
 			if (child.ToPlatform(MauiContext) is { } nativeChild)
 			{
-				if (nativeChild.Parent != null && nativeChild.Parent is EventBoxWrapperView)
+				if (nativeChild.Parent != null && nativeChild.Parent is WrapperView)
 				{
 					PlatformView.Remove(nativeChild.Parent);
 				}
@@ -111,7 +111,7 @@ namespace Microsoft.Maui.Handlers
 
 			if (child.ToPlatform(MauiContext) is { } nativeChild)
 			{
-				if (nativeChild.Parent != null && nativeChild.Parent is EventBoxWrapperView)
+				if (nativeChild.Parent != null && nativeChild.Parent is WrapperView)
 				{
 					PlatformView.Insert(child, nativeChild.Parent, index);
 				}
@@ -132,7 +132,7 @@ namespace Microsoft.Maui.Handlers
 
 			if (child.ToPlatform(MauiContext) is { } nativeChild)
 			{
-				if (nativeChild.Parent != null && nativeChild.Parent.Parent is EventBoxWrapperView)
+				if (nativeChild.Parent != null && nativeChild.Parent.Parent is WrapperView)
 				{
 					PlatformView.Update(child, nativeChild.Parent, index);
 				}

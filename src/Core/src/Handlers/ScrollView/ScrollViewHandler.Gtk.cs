@@ -90,7 +90,7 @@ namespace Microsoft.Maui.Handlers
 
 			if (child != platformContent)
 			{
-				if (platformContent.Parent != null && platformContent.Parent is EventBoxWrapperView)
+				if (platformContent.Parent != null && platformContent.Parent is WrapperView)
 				{
 					platformView.Child = platformContent.Parent;
 				}

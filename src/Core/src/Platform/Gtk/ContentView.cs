@@ -26,7 +26,7 @@ namespace Microsoft.Maui.Platform
 				{
 					//PackStart(value, true, false, 0);
 
-					if (value.Parent is EventBoxWrapperView)
+					if (value.Parent is WrapperView)
 					{
 						Child = value.Parent;
 					}

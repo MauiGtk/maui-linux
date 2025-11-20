@@ -31,7 +31,7 @@ namespace Microsoft.Maui.Handlers
 
 			oldParent?.Remove(PlatformView);
 
-			var wrapper = new EventBoxWrapperView();
+			var wrapper = new WrapperView();
 			wrapper.SetChild(PlatformView);
 
 			ContainerView = wrapper;
@@ -49,7 +49,7 @@ namespace Microsoft.Maui.Handlers
 				return;
 			}
 
-			var wrapper = (EventBoxWrapperView)ContainerView;
+			var wrapper = (WrapperView)ContainerView;
 			var oldParent = wrapper.Parent as Container;
 			var oldIndex = GetChildIndex(oldParent, wrapper);
 
@@ -64,7 +64,7 @@ namespace Microsoft.Maui.Handlers
 
 		static void CleanupContainerView(Widget? containerView)
 		{
-			if (containerView is EventBoxWrapperView wrapper)
+			if (containerView is WrapperView wrapper)
 			{
 				wrapper.SetChild(null);
 				wrapper.Dispose();
@@ -148,116 +148,4 @@ namespace Microsoft.Maui.Handlers
 		}
 
 	}
-
-	/// <summary>
-	/// Wrapper similar to WinUI's WrapperView, but for GTK:
-	/// - Provides an event-capable container (no-window children like Label/Image won't receive events otherwise)
-	/// - Central place to attach gestures, clipping, effects, etc.
-	/// </summary>
-	public class EventBoxWrapperView : EventBox, IDisposable
-	{
-		public EventBoxWrapperView()
-		{
-			// Transparent, but receives events
-			VisibleWindow = false;
-			AboveChild = false;
-		}
-
-		public void SetChild(Widget? child)
-		{
-			if (Child != null)
-				Remove(Child);
-
-			if (child != null)
-			{
-				Add(child);
-
-				// Sichtbar machen – wichtig bei dynamisch gesetzten Kindern
-				child.Show();
-
-				// Expand weitergeben (falls Parent das auswertet)
-				child.Hexpand = this.Hexpand;
-				child.Vexpand = this.Vexpand;
-
-				// optional: Margins spiegeln, wenn du welche nutzt
-				child.Margin = this.Margin;
-			}
-
-			// Den Wrapper selbst sichtbar halten
-			this.Show();
-		}
-
-		protected override void OnGetPreferredWidth(out int min, out int nat)
-		{
-			if (Child != null)
-				Child.GetPreferredWidth(out min, out nat);
-			else
-				min = nat = 0;
-		}
-
-		protected override void OnGetPreferredHeight(out int min, out int nat)
-		{
-			if (Child != null)
-				Child.GetPreferredHeight(out min, out nat);
-			else
-				min = nat = 0;
-		}
-
-		protected override void OnGetPreferredHeightForWidth(int width, out int min, out int nat)
-		{
-			if (Child != null)
-				Child.GetPreferredHeightForWidth(width, out min, out nat);
-			else
-				min = nat = 0;
-		}
-
-		protected override void OnGetPreferredWidthForHeight(int height, out int min, out int nat)
-		{
-			if (Child != null)
-				Child.GetPreferredWidthForHeight(height, out min, out nat);
-			else
-				min = nat = 0;
-		}
-
-		protected override void OnSizeAllocated(Gdk.Rectangle allocation)
-		{
-			base.OnSizeAllocated(allocation);
-			Child?.SizeAllocate(new Gdk.Rectangle(allocation.X, allocation.Y, allocation.Width, allocation.Height));
-		}
-
-		//protected override bool OnDrawn(Cairo.Context cr)
-		//{
-		//	// Niemals selbst malen – Child soll sichtbar sein
-		//	return false; // false = nichts selbst gezeichnet, Default weiter
-		//}
-
-		protected override void OnHierarchyChanged(Widget previous_toplevel)
-		{
-			base.OnHierarchyChanged(previous_toplevel);
-			if (Child != null)
-			{
-				Child.Hexpand = this.Hexpand;
-				Child.Vexpand = this.Vexpand;
-			}
-		}
-
-		protected override void OnDestroyed()
-		{
-			if (Child != null)
-				Remove(Child);
-			base.OnDestroyed();
-		}
-
-		public new void Dispose()
-		{
-			try
-			{
-				if (Child != null)
-					Remove(Child);
-			}
-			catch { /* ignore */ }
-			base.Dispose();
-		}
-	}
-
 }

@@ -22,7 +22,7 @@ public class FrameView : Frame, ICrossPlatformLayoutBacking
 			}
 			else if (value != null)
 			{
-				if (value.Parent is EventBoxWrapperView)
+				if (value.Parent is WrapperView)
 				{
 					Child = value.Parent;
 				}

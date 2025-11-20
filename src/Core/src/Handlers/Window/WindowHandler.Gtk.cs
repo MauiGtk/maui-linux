@@ -23,7 +23,7 @@ namespace Microsoft.Maui.Handlers
 
 			var platformContent = window.Content.ToPlatform(handler.MauiContext);
 
-			if (platformContent.Parent != null && platformContent.Parent is EventBoxWrapperView)
+			if (platformContent.Parent != null && platformContent.Parent is WrapperView)
 			{
 				handler.PlatformView.Child = platformContent.Parent;
 			}
