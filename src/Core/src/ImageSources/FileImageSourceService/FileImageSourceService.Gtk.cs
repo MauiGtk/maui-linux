@@ -25,59 +25,36 @@ namespace Microsoft.Maui
 				return FromResult(null);
 
 			var filename = imageSource.File;
-			var pureFilename = Path.GetFileNameWithoutExtension(imageSource.File);
-			var ext = Path.GetExtension(imageSource.File);
-
-			int scaleInt = (int)Math.Round(scale * 100);
-			string scaledFilename = $"{pureFilename}.scale-{scaleInt}{ext}";
-
-			var rgxMatchScaling = new Regex(@"scale-(\d+)");
-
+			
 			NativeImage? TryLoadFile()
 			{
 				if (File.Exists(filename))
 					return new NativeImage(filename);
 
-				if (File.Exists(scaledFilename))
-					return new(scaledFilename);
+				if (GtkBuildSettings.MauiImageBehavior !=  GtkBuildSettings.MauiResourceBehavior.CopyFiles) return default;
 
-				var files = Directory.GetFiles(AppContext.BaseDirectory, "*"+ext).Select(x => Path.GetFileName(x)).ToArray();
-				files = files.Where(x => x.StartsWith(pureFilename) && rgxMatchScaling.IsMatch(x)).ToArray();
+				var filePath = FileSystemUtils.GetFilePath(FileSystemUtils.MauiResourceType.MauiImage, filename, scale);
 
-				if (files.Length == 0) return null;
+				if (filePath != null && File.Exists(filePath))
+					return new NativeImage(filePath);
 
-				var scaling = files.Where(x => rgxMatchScaling.IsMatch(x)).ToDictionary(x => int.Parse(rgxMatchScaling.Match(x).Groups[1].Value), y => y);
-				var closestScale = scaling.Keys.OrderBy(s => Math.Abs(s - scaleInt)).FirstOrDefault();
-				var res = scaling[closestScale];
-
-				if (res != null) return new(Path.Combine(AppContext.BaseDirectory, res));
-
-				return null;
+				filePath = FileSystemUtils.GetFilePath(FileSystemUtils.MauiResourceType.MauiImage, filename, scale);
+				
+				if (filePath != null && File.Exists(filePath))
+					return new NativeImage(filePath);
+				
+				return default;
 			}
 
 			NativeImage? TryLoadEmbededMauiImage()
 			{
-				var baseName = $"MauiGTK.MauiImages.{pureFilename}";
-				
-				foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+				if (GtkBuildSettings.MauiImageBehavior != GtkBuildSettings.MauiResourceBehavior.EmbedFiles)	return default;
+
+				var (assembly, resourceName) = FileSystemUtils.GetMauiRessource(FileSystemUtils.MauiResourceType.MauiImage, filename, scale);
+
+				if (assembly != null && !string.IsNullOrWhiteSpace(resourceName))
 				{
-					var names = assembly.GetManifestResourceNames();
-					names = names.Where(x => x.Contains(baseName, StringComparison.InvariantCulture) && x.EndsWith(ext)).ToArray();
-
-					if (names.Length == 0) continue;
-					
-					var scaledFullqualifiedName = names.FirstOrDefault(x => x.Contains(scaledFilename, StringComparison.InvariantCulture));
-
-					if (scaledFullqualifiedName != null)
-					{
-						return new(assembly, scaledFullqualifiedName);
-					}
-
-					var scaling = names.Where(x => rgxMatchScaling.IsMatch(x)).ToDictionary(x => int.Parse(rgxMatchScaling.Match(x).Groups[1].Value), y => y);
-					var closestScale = scaling.Keys.OrderBy(s => Math.Abs(s - scaleInt)).FirstOrDefault();
-					var res = scaling[closestScale];
-
-					if (res != null) return new(assembly, res);
+					return new(assembly, resourceName);
 				}
 
 				return default;
