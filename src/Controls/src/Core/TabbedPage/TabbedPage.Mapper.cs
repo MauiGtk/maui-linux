@@ -26,7 +26,7 @@ namespace Microsoft.Maui.Controls
 			TabbedViewHandler.Mapper.ReplaceMapping<TabbedPage, ITabbedViewHandler>(PlatformConfiguration.AndroidSpecific.TabbedPage.IsSwipePagingEnabledProperty.PropertyName, MapIsSwipePagingEnabled);
 #endif
 
-#if WINDOWS || ANDROID || TIZEN
+#if WINDOWS || ANDROID || TIZEN || GTK
 			TabbedViewHandler.PlatformViewFactory = OnCreatePlatformView;
 #endif
 		}

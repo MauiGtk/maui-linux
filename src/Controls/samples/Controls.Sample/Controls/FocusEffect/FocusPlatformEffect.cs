@@ -17,6 +17,8 @@ namespace Maui.Controls.Sample.Controls
 		UIKit.UIColor backgroundColor = default!;
 #elif TIZEN
 		Tizen.NUI.Color backgroundColor = default!;
+#elif GTK
+		Microsoft.Maui.Graphics.Color backgroundColor = default!;
 #endif
 
 		public FocusPlatformEffect()
@@ -37,6 +39,10 @@ namespace Maui.Controls.Sample.Controls
 				Control.BackgroundColor = backgroundColor = UIKit.UIColor.FromRGB(204, 153, 255);
 #elif TIZEN
 				(Control as Tizen.NUI.BaseComponents.View).BackgroundColor = backgroundColor = Tizen.NUI.Color.LightGreen;
+#elif GTK
+				var gtkControl = Control as Gtk.Widget;
+				backgroundColor = Microsoft.Maui.Graphics.Colors.LightGreen;
+				gtkControl.SetBackgroundColor(backgroundColor);
 #endif
 			}
 			catch (Exception ex)
@@ -89,6 +95,20 @@ namespace Maui.Controls.Sample.Controls
 					else
 					{
 						Control.BackgroundColor = backgroundColor;
+					}
+				}
+#elif GTK
+				if (args.PropertyName == "IsFocused")
+				{
+					var gtkControl = Control as Gtk.Widget;
+					var curColor = gtkControl.GetBackgroundColor();
+					if (curColor.Equals(backgroundColor))
+					{
+						gtkControl.SetBackgroundColor(Microsoft.Maui.Graphics.Colors.White);
+					}
+					else
+					{
+						gtkControl.SetBackgroundColor(backgroundColor);
 					}
 				}
 #endif

@@ -30,6 +30,11 @@ namespace Microsoft.Maui.Controls
 			ToolbarHandler.Mapper.ReplaceMapping<Toolbar, IToolbarHandler>(nameof(Toolbar.BarBackground), MapBarBackground);
 			ToolbarHandler.Mapper.ReplaceMapping<Toolbar, IToolbarHandler>(nameof(Toolbar.BarTextColor), MapBarTextColor);
 #endif
+
+#if GTK
+			ToolbarHandler.Mapper.ReplaceMapping<Toolbar, IToolbarHandler>(nameof(Toolbar.BackButtonEnabled), MapBackButtonEnabled);
+#endif
+
 #if WINDOWS
 			ToolbarHandler.Mapper.ReplaceMapping<Toolbar, IToolbarHandler>(nameof(Toolbar.BackButtonEnabled), MapBackButtonEnabled);
 			ToolbarHandler.Mapper.ReplaceMapping<Toolbar, IToolbarHandler>(PlatformConfiguration.WindowsSpecific.Page.ToolbarPlacementProperty.PropertyName, MapToolbarPlacement);
