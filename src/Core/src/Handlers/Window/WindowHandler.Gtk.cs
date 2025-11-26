@@ -29,6 +29,10 @@ namespace Microsoft.Maui.Handlers
 			}
 			else
 			{
+				if (handler.PlatformView.Child != null)
+				{
+					handler.PlatformView.Remove(handler.PlatformView.Child);
+				}
 				handler.PlatformView.Child = platformContent;
 			}
 		}

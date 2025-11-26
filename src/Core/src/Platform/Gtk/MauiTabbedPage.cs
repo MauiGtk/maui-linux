@@ -1,39 +1,83 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Collections.ObjectModel;
+using System.Linq;
+using GLib;
 using Gtk;
 
 namespace Microsoft.Maui.Platform;
 
 public class MauiTabbedPage : Notebook
 {
-	public List<MauiTabbedPageLabel> TabPageLabels = new();
+	public List<MauiTabbedPageNaviagtionItem> NavigationItems = new();
 	public int SelectedPageIndex { get; set; }
 
-	private Graphics.Color? _selectedColor;
-	public Graphics.Color? SelectedColor 
+	private Graphics.Color? _barTextColor;
+	public Graphics.Color? BarTextColor
 	{
-		get => _selectedColor;
+		get => _barTextColor;
 		set
 		{
-			if (_selectedColor != value)
+			if (_barTextColor != value)
 			{
-				_selectedColor = value;
-				UpdateSelectedItemColor();
+				_barTextColor = value;
+				UpdateBarTextColor();
 			}
 		}
 	}
 
-	private Graphics.Color? _unselectedColor;
-	public Graphics.Color? UnselectedColor 
+	private Graphics.Color? _selectedItemTextColor;
+	public Graphics.Color? SelectedItemTextColor
 	{
-		get => _unselectedColor;
+		get => _selectedItemTextColor;
 		set
 		{
-			if (_unselectedColor != value)
+			if (_selectedItemTextColor != value)
 			{
-				_unselectedColor = value;
-				UpdateUnselectedItemColor();
+				_selectedItemTextColor = value;
+				UpdateSelectedItemTextColor();
+			}
+		}
+	}
+
+	private Graphics.Color? _unselectedItemTextColor;
+	public Graphics.Color? UnselectedItemTextColor
+	{
+		get => _unselectedItemTextColor;
+		set
+		{
+			if (_unselectedItemTextColor != value)
+			{
+				_unselectedItemTextColor = value;
+				UpdateUnselectedItemTextColor();
+			}
+		}
+	}
+
+	private Graphics.Color? _selectedItemBackgroundColor;
+	public Graphics.Color? SelectedItemBackgroundColor
+	{
+		get => _selectedItemBackgroundColor;
+		set
+		{
+			if (_selectedItemBackgroundColor != value)
+			{
+				_selectedItemBackgroundColor = value;
+				UpdateSelectedItemBackgroundColor();
+			}
+		}
+	}
+
+	private Graphics.Color? _unselectedItemBackgroundColor;
+	public Graphics.Color? UnselectedItemBackgroundColor
+	{
+		get => _unselectedItemBackgroundColor;
+		set
+		{
+			if (_unselectedItemBackgroundColor != value)
+			{
+				_unselectedItemBackgroundColor = value;
+				UpdateUnselectedItemBackgroundColor();
 			}
 		}
 	}
@@ -79,36 +123,69 @@ public class MauiTabbedPage : Notebook
 	private void MauiTabbedPage_SwitchPage(object o, SwitchPageArgs args)
 	{
 		SelectedPageIndex = (int)args.PageNum;
-		UpdateUnselectedItemColor();
-		UpdateSelectedItemColor();
+		UpdateUnselectedItemBackgroundColor();
+		UpdateSelectedItemBackgroundColor();
+
+		var tabPos = TabPos;
 	}
 
-	public int AppendPage(Widget child, MauiTabbedPageLabel label)
+	public int AppendPage(MauiTabbedPageNaviagtionItem naviagtionItem)
 	{
-		TabPageLabels.Add(label);
-		label.Show();
-		return base.AppendPage(child, label);
+		NavigationItems.Add(naviagtionItem);
+		naviagtionItem.TabPageLabel.Show();
+		return base.AppendPage(naviagtionItem.Page, naviagtionItem.TabPageLabel);
 	}
 
-	public void SetLabelTextColor(Graphics.Color color)
+	public void UpdateTabPages()
 	{
-		foreach (var label in TabPageLabels)
+		var selected = SelectedPageIndex;
+
+		foreach (var child in this.Children)
 		{
-			label.TextLabel.UpdateTextColor(color);
+			this.Remove(child);
+		}
+
+		foreach (var navItem in NavigationItems.OrderBy(x => x.Order))
+		{
+			base.AppendPage(navItem.Page, navItem.TabPageLabel);
+		}
+
+		SelectedPageIndex = selected;
+	}
+
+	public void UpdateBarTextColor()
+	{
+		foreach (var pair in NavigationItems)
+		{
+			pair.TabPageLabel.TextLabel.UpdateTextColor(BarTextColor ?? Graphics.Colors.Black);
 		}
 	}
 
-	private void UpdateSelectedItemColor()
+	private void UpdateSelectedItemBackgroundColor()
 	{
-		var label = TabPageLabels[SelectedPageIndex];
-		label.SetBackgroundColor(SelectedColor);
+		var pair = NavigationItems.ElementAt(SelectedPageIndex);
+		pair.TabPageLabel.SetBackgroundColor(SelectedItemBackgroundColor);
 	}
 
-	private void UpdateUnselectedItemColor()
+	private void UpdateUnselectedItemBackgroundColor()
 	{
-		foreach (var label in TabPageLabels)
+		foreach (var pair in NavigationItems)
 		{
-			label.SetBackgroundColor(UnselectedColor);
+			pair.TabPageLabel.SetBackgroundColor(UnselectedItemBackgroundColor);
+		}
+	}
+
+	private void UpdateSelectedItemTextColor()
+	{
+		var pair = NavigationItems.ElementAt(SelectedPageIndex);
+		pair.TabPageLabel.TextLabel.UpdateTextColor(SelectedItemTextColor ?? BarTextColor ?? Graphics.Colors.Black);
+	}
+
+	private void UpdateUnselectedItemTextColor()
+	{
+		foreach (var pair in NavigationItems)
+		{
+			pair.TabPageLabel.TextLabel.UpdateTextColor(UnselectedItemTextColor ?? BarTextColor ?? Graphics.Colors.Black);
 		}
 	}
 
@@ -141,10 +218,12 @@ public class MauiTabbedPage : Notebook
 		CssProvider.LoadFromData(fullCSS);
 	}
 
-	public class MauiTabbedPageLabel : Box
+	public class MauiTabPageLabel : Box
 	{
 		public Label TextLabel { get; set; } = new Label();
+
 		public Image? Icon { get; set; } = null;
+		public int IconSourceHash { get; set; }
 
 		string css = @"
 			.maui-tab {
@@ -153,10 +232,11 @@ public class MauiTabbedPage : Notebook
 			}
 		";
 
-		public MauiTabbedPageLabel(string text, Image? icon = null) : base(Orientation.Horizontal, 0)
+		public MauiTabPageLabel(string text, Image? icon = null, int iconSourceHash = 0) : base(Orientation.Horizontal, 0)
 		{
 			TextLabel.Text = text;
 			Icon = icon;
+			IconSourceHash = iconSourceHash;
 
 			var provider = new Gtk.CssProvider();
 			provider.LoadFromData(css);
@@ -173,6 +253,26 @@ public class MauiTabbedPage : Notebook
 			PackEnd(TextLabel, false, false, 3);
 
 			ShowAll();
+		}
+	}
+
+	public class MauiTabbedPageNaviagtionItem
+	{
+		public Widget Page { get; set; }
+		public MauiTabPageLabel TabPageLabel { get; set; } = new("");
+		public Guid Id { get; private set; }
+		public int Order { get; internal set; }
+
+		public MauiTabbedPageNaviagtionItem(Widget page)
+		{
+			Page = page;
+		}
+
+		public MauiTabbedPageNaviagtionItem(Widget page, MauiTabPageLabel label, Guid id)
+		{
+			Page = page;
+			TabPageLabel = label;
+			Id = id;
 		}
 	}
 }
