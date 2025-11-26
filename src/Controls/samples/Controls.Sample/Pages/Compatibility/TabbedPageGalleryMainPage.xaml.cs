@@ -3,7 +3,11 @@ using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics;
-using AndroidSpecific = Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
+#if GTK
+	using GTKSpecific = Microsoft.Maui.Controls.PlatformConfiguration.GTKSpecific;
+#else
+	using AndroidSpecific = Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
+#endif
 
 namespace Maui.Controls.Sample.Pages
 {
@@ -49,7 +53,11 @@ namespace Maui.Controls.Sample.Pages
 			};
 
 			SetNewMainPage(bottomTabs);
+#if GTK
+			GTKSpecific.TabbedPage.SetTabPosition(bottomTabs, GTKSpecific.TabPosition.Bottom);
+#else
 			AndroidSpecific.TabbedPage.SetToolbarPlacement(bottomTabs, AndroidSpecific.ToolbarPlacement.Bottom);
+#endif
 			Application.Current!.MainPage = bottomTabs;
 		}
 

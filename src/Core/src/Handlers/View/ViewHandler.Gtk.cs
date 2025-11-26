@@ -55,10 +55,7 @@
 			if (handler.MauiContext is not null)
 			{
 				var toolbarContainer = handler.MauiContext.GetToolBarContainer();
-				if (toolbarContainer is not null)
-				{
-					toolbarContainer.SetToolbar(tb.Toolbar?.ToPlatform(handler.MauiContext) as MauiToolbar);
-				}
+				toolbarContainer?.SetToolbar(tb.Toolbar?.ToPlatform(handler.MauiContext) as MauiToolbar);
 			}
 		}
 	}

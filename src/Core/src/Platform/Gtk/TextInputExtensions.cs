@@ -126,9 +126,19 @@ namespace Microsoft.Maui
 				return;
 
 			entry.OnSelectionLengthChanged(platformView.GetSelection());
-
 		}
 
+		public static void OnFocusChanged(this Entry? platformView, IEntry? entry)
+		{
+			if (entry == null || platformView == null)
+				return;
+
+			var isFocused = platformView.IsFocus;
+			if (entry.IsFocused != isFocused)
+			{
+				entry.IsFocused = isFocused;
+			}
+		}
 	}
 
 }

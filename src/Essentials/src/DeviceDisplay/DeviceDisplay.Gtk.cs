@@ -72,7 +72,18 @@ namespace Microsoft.Maui.Devices
 
 		public static Gdk.Monitor CurrentMonitor => DefaultDisplay.GetMonitorAtPoint(0, 0); // TODO: find out aktual mouse position
 
-		public static Gdk.Monitor PrimaryMonitor => GetMonitors().Single(m => m.IsPrimary);
+		public static Gdk.Monitor PrimaryMonitor
+		{
+			get
+			{
+				var monitors = GetMonitors();
+				var primary = monitors.FirstOrDefault(m => m.IsPrimary);
+
+				if (primary == null) primary = monitors.FirstOrDefault();
+
+				return primary;
+			}
+		}
 
 		public static int CurrentScaleFactor = CurrentMonitor.ScaleFactor;
 

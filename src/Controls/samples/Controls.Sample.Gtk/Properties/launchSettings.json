@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Controls.Sample.Gtk": {
+      "commandName": "Project"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    }
+  }
+}

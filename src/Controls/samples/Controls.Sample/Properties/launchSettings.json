@@ -3,6 +3,14 @@
     "Windows Machine": {
       "commandName": "MsixPackage",
       "nativeDebugging": true
+    },
+    "WSL": {
+        "commandName": "WSL2",
+        "distributionName": "",
+        "environmentVariables": {
+            "DISPLAY": "127.0.0.1:0.0",
+            "DOTNET_ENVIRONMENT": "Development"
+        }
     }
   }
 }

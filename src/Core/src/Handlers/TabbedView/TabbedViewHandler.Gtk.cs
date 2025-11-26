@@ -1,11 +1,12 @@
-using PlatformView = Microsoft.Maui.Platform.NotImplementedView;
+using Gtk;
+using PlatformView = Microsoft.Maui.Platform.MauiTabbedPage;
 
 namespace Microsoft.Maui.Handlers;
 
-public partial class TabbedViewHandler
+public partial class TabbedViewHandler : ViewHandler<ITabbedView, MauiTabbedPage>
 {
-	protected override PlatformView CreatePlatformView()
+	protected override MauiTabbedPage CreatePlatformView()
 	{
-		return new(nameof(ITabbedView));
+		return new();
 	}
 }
