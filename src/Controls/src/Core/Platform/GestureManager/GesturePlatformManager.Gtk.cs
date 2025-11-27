@@ -36,6 +36,17 @@ namespace Microsoft.Maui.Controls.Platform
 		double _pinchCumulativeScale;
 		Point _pinchInitialScalePoint;
 
+		TargetEntry[] targets = {
+			new TargetEntry("text/plain", 0, 0),
+			new TargetEntry("text/uri-list", 0, 1),
+			new TargetEntry("image/png",  0, 2),
+			new TargetEntry("image/jpeg", 0, 3),
+			new TargetEntry("image/jpg",  0, 4),
+			new TargetEntry("image/gif",  0, 5),
+			new TargetEntry("image/bmp",  0, 6),
+        };
+
+		string _DragDataLocalIdentifier = "<<<< Dragdata local >>>>";
 		static DataPackage DragDataPackage = new();
 
 		static readonly Dictionary<Type, List<Gdk.EventMask>> RecognizerEventMapping = new()
@@ -384,11 +395,7 @@ namespace Microsoft.Maui.Controls.Platform
 				Container.DragEnd += OnContainerDragEnd;
 				Container.DragLeave += OnContainerDragLeave;
 				
-				Gtk.Drag.SourceSet(_container, Gdk.ModifierType.Button1Mask, new TargetEntry[]
-				{
-					new TargetEntry("text/plain", TargetFlags.App, 0)
-				},
-				DragAction.Copy);
+				Gtk.Drag.SourceSet(_container, Gdk.ModifierType.Button1Mask, targets, DragAction.Copy);
 			}
 
 			if (gestures.HasAnyGesturesFor<DropGestureRecognizer>())
@@ -398,15 +405,50 @@ namespace Microsoft.Maui.Controls.Platform
 				Container.DragMotion += OnContainerDragMotion;
 				Container.DragDataReceived += OnContainerDragDataReceived;
 
-				Gtk.Drag.DestSet(_container, DestDefaults.All, new TargetEntry[]
-				{
-					new TargetEntry("text/plain", TargetFlags.App, 0)
-				}, DragAction.Copy);
+				Gtk.Drag.DestSet(_container, DestDefaults.All, targets, DragAction.Copy);
+
+				Gtk.Drag.SourceSet(_container, Gdk.ModifierType.Button1Mask, targets, DragAction.Copy);
 			}
 		}
 
 		#region Drag & Drop
-		private void OnContainerDragDataReceived(object o, DragDataReceivedArgs args) { /* Maybe needed for File Drop */	}
+		private async void OnContainerDragDataReceived(object sender, DragDataReceivedArgs args) 
+		{
+			DataPackageView packageView;
+			if (args.SelectionData.Text != _DragDataLocalIdentifier)
+			{
+				switch (args.Info)
+				{
+					case 0:
+						string text = System.Text.Encoding.UTF8.GetString(args.SelectionData.Data);
+						packageView = new DataPackageView(new DataPackage(text));
+						break;
+
+					case 1:
+						string rawUris = System.Text.Encoding.UTF8.GetString(args.SelectionData.Data);
+						var uris = rawUris.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+						packageView = new DataPackageView(new DataPackage(uris));
+						break;
+					case >= 2 and <= 6:
+						byte[] imageBytes = args.SelectionData.Data;
+						packageView = new DataPackageView(new DataPackage(imageBytes));
+						break;
+					default:
+						break;
+				}
+			}
+            else
+            {
+                packageView = new DataPackageView(DragDataPackage);
+            }
+
+			var dropGestures = ViewElement.GestureRecognizers.GetGesturesFor<DropGestureRecognizer>();
+			foreach (DropGestureRecognizer recognizer in dropGestures)
+			{
+				await recognizer.SendDrop(new DropEventArgs(packageView, (relativeTo) => GetPosition(relativeTo, args.X, args.Y), new PlatformDropEventArgs(sender, null)));
+			}
+			args.RetVal = true;
+		}
 
 		private void OnContainerDragMotion(object sender, DragMotionArgs args)
 		{
@@ -415,8 +457,6 @@ namespace Microsoft.Maui.Controls.Platform
 
 			Gdk.Drag.Status(args.Context, Gdk.DragAction.Copy, args.Time);
 			args.RetVal = true;
-
-			Console.WriteLine("DragMotion called");
 			
 			if (ViewElement == null)
 				return;
@@ -450,7 +490,7 @@ namespace Microsoft.Maui.Controls.Platform
 			var gestures = ViewElement.GestureRecognizers.GetGesturesFor<DragGestureRecognizer>();
 			foreach (var recognizer in gestures)
 			{
-				args.SelectionData.Text = DateTime.UtcNow.ToString();
+				args.SelectionData.Text = _DragDataLocalIdentifier;
 			}
 		}
 
@@ -471,11 +511,8 @@ namespace Microsoft.Maui.Controls.Platform
 			if (ViewElement == null)
 				return;
 
-			var dropGestures = ViewElement.GestureRecognizers.GetGesturesFor<DropGestureRecognizer>();
-			foreach (DropGestureRecognizer recognizer in dropGestures)
-			{
-				await recognizer.SendDrop(new DropEventArgs(new DataPackageView(DragDataPackage), (relativeTo) => GetPosition(relativeTo, args.X, args.Y), new PlatformDropEventArgs(sender, args)));
-			}
+			var atom = Gdk.Atom.Intern("text/uri-list", false);
+			Gtk.Drag.GetData(Container, args.Context, atom, args.Time);
 		}
 
 		private void OnContainerDropCompleted(object o, DragEndArgs args)
