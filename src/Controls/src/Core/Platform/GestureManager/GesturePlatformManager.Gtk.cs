@@ -11,7 +11,6 @@ using Gdk;
 using Gtk;
 using Microsoft.Maui.Controls.Handlers.Items.Platform;
 using Microsoft.Maui.Controls.Internals;
-using Microsoft.Maui.Graphics;
 using Point = Microsoft.Maui.Graphics.Point;
 
 namespace Microsoft.Maui.Controls.Platform
@@ -52,7 +51,6 @@ namespace Microsoft.Maui.Controls.Platform
 			new TargetEntry("application/octet-stream", 0, 20)
 		};
 
-		string _dragDataLocalIdentifier = "<<<< Dragdata local >>>>";
 		static DataPackage? dragDataPackage = null;
 
 		static readonly Dictionary<Type, List<Gdk.EventMask>> RecognizerEventMapping = new()
@@ -508,8 +506,6 @@ namespace Microsoft.Maui.Controls.Platform
 			var gestures = ViewElement.GestureRecognizers.GetGesturesFor<DragGestureRecognizer>();
 			foreach (var recognizer in gestures)
 			{
-				args.SelectionData.Text = _dragDataLocalIdentifier;
-
 				if (!string.IsNullOrWhiteSpace(dragDataPackage?.Text))
 				{
 					args.SelectionData.Text = dragDataPackage.Text;
