@@ -1,4 +1,5 @@
 ﻿using System;
+using Gtk;
 namespace Microsoft.Maui.Controls;
 
 /// <summary>
@@ -99,6 +100,24 @@ public class PlatformDropCompletedEventArgs
 
 	internal PlatformDropCompletedEventArgs(Microsoft.UI.Xaml.UIElement sender,
 		Microsoft.UI.Xaml.DropCompletedEventArgs dropCompletedEventArgs)
+	{
+		Sender = sender;
+		DropCompletedEventArgs = dropCompletedEventArgs;
+	}
+
+#elif GTK
+	/// <summary>
+	/// Gets the native view attached to the event.
+	/// </summary>
+	public object Sender { get; }
+
+	/// <summary>
+	/// Gets data for the DropCompleted event.
+	/// </summary>
+	public DragEndArgs DropCompletedEventArgs { get; }
+
+	internal PlatformDropCompletedEventArgs(object sender,
+		DragEndArgs dropCompletedEventArgs)
 	{
 		Sender = sender;
 		DropCompletedEventArgs = dropCompletedEventArgs;
