@@ -36,18 +36,24 @@ namespace Microsoft.Maui.Controls.Platform
 		double _pinchCumulativeScale;
 		Point _pinchInitialScalePoint;
 
-		TargetEntry[] targets = {
+		TargetEntry[] _dragDroptargets = {
+			//Text types
 			new TargetEntry("text/plain", 0, 0),
 			new TargetEntry("text/uri-list", 0, 1),
-			new TargetEntry("image/png",  0, 2),
-			new TargetEntry("image/jpeg", 0, 3),
-			new TargetEntry("image/jpg",  0, 4),
-			new TargetEntry("image/gif",  0, 5),
-			new TargetEntry("image/bmp",  0, 6),
-        };
+			
+			//Image Types
+			new TargetEntry("image/png",  0, 10),
+			new TargetEntry("image/jpeg", 0, 11),
+			new TargetEntry("image/jpg",  0, 12),
+			new TargetEntry("image/gif",  0, 13),
+			new TargetEntry("image/bmp",  0, 14),
+			
+			//Misc
+			new TargetEntry("application/octet-stream", 0, 20)
+		};
 
-		string _DragDataLocalIdentifier = "<<<< Dragdata local >>>>";
-		static DataPackage DragDataPackage = new();
+		string _dragDataLocalIdentifier = "<<<< Dragdata local >>>>";
+		static DataPackage? dragDataPackage = null;
 
 		static readonly Dictionary<Type, List<Gdk.EventMask>> RecognizerEventMapping = new()
 		{
@@ -395,7 +401,7 @@ namespace Microsoft.Maui.Controls.Platform
 				Container.DragEnd += OnContainerDragEnd;
 				Container.DragLeave += OnContainerDragLeave;
 				
-				Gtk.Drag.SourceSet(_container, Gdk.ModifierType.Button1Mask, targets, DragAction.Copy);
+				Gtk.Drag.SourceSet(_container, Gdk.ModifierType.Button1Mask, _dragDroptargets, DragAction.Copy);
 			}
 
 			if (gestures.HasAnyGesturesFor<DropGestureRecognizer>())
@@ -405,47 +411,59 @@ namespace Microsoft.Maui.Controls.Platform
 				Container.DragMotion += OnContainerDragMotion;
 				Container.DragDataReceived += OnContainerDragDataReceived;
 
-				Gtk.Drag.DestSet(_container, DestDefaults.All, targets, DragAction.Copy);
+				Gtk.Drag.DestSet(_container, DestDefaults.All, _dragDroptargets, DragAction.Copy);
 
-				Gtk.Drag.SourceSet(_container, Gdk.ModifierType.Button1Mask, targets, DragAction.Copy);
+				Gtk.Drag.SourceSet(_container, Gdk.ModifierType.Button1Mask, _dragDroptargets, DragAction.Copy);
 			}
 		}
 
 		#region Drag & Drop
 		private async void OnContainerDragDataReceived(object sender, DragDataReceivedArgs args) 
 		{
+			if (ViewElement == null)
+				return;
+
 			DataPackageView packageView;
-			if (args.SelectionData.Text != _DragDataLocalIdentifier)
+			
+			if (dragDataPackage == null)
 			{
+				var dataPackage = new DataPackage();
+				packageView = new DataPackageView(dataPackage);
 				switch (args.Info)
 				{
 					case 0:
-						string text = System.Text.Encoding.UTF8.GetString(args.SelectionData.Data);
-						packageView = new DataPackageView(new DataPackage(text));
+						dataPackage.Text = System.Text.Encoding.UTF8.GetString(args.SelectionData.Data);
 						break;
-
 					case 1:
 						string rawUris = System.Text.Encoding.UTF8.GetString(args.SelectionData.Data);
 						var uris = rawUris.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-						packageView = new DataPackageView(new DataPackage(uris));
+						dataPackage.Text = string.Join(Environment.NewLine, uris.Select(uri => Regex.Replace(uri, @"^file://", string.Empty)));
 						break;
-					case >= 2 and <= 6:
+					case >= 10 and <= 19:
 						byte[] imageBytes = args.SelectionData.Data;
-						packageView = new DataPackageView(new DataPackage(imageBytes));
+						dataPackage.Image = ImageSource.FromStream(() => new System.IO.MemoryStream(imageBytes));
+						break;
+					case 20:
+						byte[] bytes = args.SelectionData.Data;
+						dataPackage.Text = Convert.ToBase64String(bytes);
 						break;
 					default:
 						break;
 				}
+
+				var target = _dragDroptargets.FirstOrDefault(x => x.Info == args.Info);
+				dataPackage.Properties["Target"] = target;
+				dataPackage.Properties["MimeType"] = target.Target;
 			}
             else
             {
-                packageView = new DataPackageView(DragDataPackage);
+                packageView = new DataPackageView(dragDataPackage);
             }
 
 			var dropGestures = ViewElement.GestureRecognizers.GetGesturesFor<DropGestureRecognizer>();
 			foreach (DropGestureRecognizer recognizer in dropGestures)
 			{
-				await recognizer.SendDrop(new DropEventArgs(packageView, (relativeTo) => GetPosition(relativeTo, args.X, args.Y), new PlatformDropEventArgs(sender, null)));
+				await recognizer.SendDrop(new DropEventArgs(packageView, (relativeTo) => GetPosition(relativeTo, args.X, args.Y), new PlatformDropEventArgs(sender, args)));
 			}
 			args.RetVal = true;
 		}
@@ -457,14 +475,14 @@ namespace Microsoft.Maui.Controls.Platform
 
 			Gdk.Drag.Status(args.Context, Gdk.DragAction.Copy, args.Time);
 			args.RetVal = true;
-			
+
 			if (ViewElement == null)
 				return;
 
 			var gestures = ViewElement.GestureRecognizers.GetGesturesFor<DropGestureRecognizer>();
 			foreach (var recognizer in gestures)
 			{
-				recognizer.SendDragOver(new DragEventArgs(DragDataPackage, (relativeTo) => GetPosition(relativeTo, args.X, args.Y), new PlatformDragEventArgs(sender, args)));
+				recognizer.SendDragOver(new DragEventArgs(dragDataPackage, (relativeTo) => GetPosition(relativeTo, args.X, args.Y), new PlatformDragEventArgs(sender, args)));
 			}
 		}
 
@@ -482,7 +500,7 @@ namespace Microsoft.Maui.Controls.Platform
 			}
 		}
 
-		private void OnContainerDragDataGet(object o, DragDataGetArgs args)
+		private async void OnContainerDragDataGet(object o, DragDataGetArgs args)
 		{
 			if (ViewElement == null)
 				return;
@@ -490,7 +508,23 @@ namespace Microsoft.Maui.Controls.Platform
 			var gestures = ViewElement.GestureRecognizers.GetGesturesFor<DragGestureRecognizer>();
 			foreach (var recognizer in gestures)
 			{
-				args.SelectionData.Text = _DragDataLocalIdentifier;
+				args.SelectionData.Text = _dragDataLocalIdentifier;
+
+				if (!string.IsNullOrWhiteSpace(dragDataPackage?.Text))
+				{
+					args.SelectionData.Text = dragDataPackage.Text;
+				}
+
+				if(dragDataPackage?.Image != null && _handler.MauiContext != null)
+				{
+					var imageSource = dragDataPackage.Image;
+					var pixbuf = await imageSource.GetPlatformImageAsync(_handler.MauiContext);
+
+					if (pixbuf != null)
+					{
+						args.SelectionData.SetPixbuf(pixbuf.Value);
+					}
+				}
 			}
 		}
 
@@ -502,7 +536,7 @@ namespace Microsoft.Maui.Controls.Platform
 			var dropGestures = ViewElement.GestureRecognizers.GetGesturesFor<DropGestureRecognizer>();
 			foreach (DropGestureRecognizer recognizer in dropGestures)
 			{
-				recognizer.SendDragLeave(new DragEventArgs(DragDataPackage, (relativeTo) => GetPosition(relativeTo, _dragMotionX, _dragMotionY), new PlatformDragEventArgs(sender, args)));
+				recognizer.SendDragLeave(new DragEventArgs(dragDataPackage, (relativeTo) => GetPosition(relativeTo, _dragMotionX, _dragMotionY), new PlatformDragEventArgs(sender, args)));
 			}
 		}
 
@@ -511,8 +545,22 @@ namespace Microsoft.Maui.Controls.Platform
 			if (ViewElement == null)
 				return;
 
-			var atom = Gdk.Atom.Intern("text/uri-list", false);
-			Gtk.Drag.GetData(Container, args.Context, atom, args.Time);
+			if (dragDataPackage != null)
+			{
+				var dropGestures = ViewElement.GestureRecognizers.GetGesturesFor<DropGestureRecognizer>();
+				foreach (DropGestureRecognizer recognizer in dropGestures)
+				{
+					await recognizer.SendDrop(new DropEventArgs(new DataPackageView(dragDataPackage), (relativeTo) => GetPosition(relativeTo, args.X, args.Y), new PlatformDropEventArgs(sender, args)));
+				}
+
+				dragDataPackage = null;
+			}
+			else
+			{
+				var atom = Gdk.Atom.Intern("text/plain", false);
+				Gtk.Drag.GetData(Container, args.Context, atom, args.Time);
+			}
+			args.RetVal = true;
 		}
 
 		private void OnContainerDropCompleted(object o, DragEndArgs args)
@@ -525,13 +573,15 @@ namespace Microsoft.Maui.Controls.Platform
 			{
 				recognizer.SendDropCompleted(new DropCompletedEventArgs());
 			}
+
+			dragDataPackage = null;
 		}
 
 		private void OnContainerDragBegin(object sender, DragBeginArgs args)
 		{
 			if (ViewElement == null)
 				return;
-			
+
 			var child = Container?.GetChildAt<Widget>(0);
 			if (child != null)
 			{
@@ -547,7 +597,11 @@ namespace Microsoft.Maui.Controls.Platform
 			{
 				var platformArgs = new PlatformDragStartingEventArgs(sender, args);
 				var startingEventArgs = recognizer.SendDragStarting(ViewElement, (relativeTo) => GetPosition(relativeTo, _pressXRoot, _pressYRoot), platformArgs);
-				DragDataPackage = startingEventArgs.Data;
+
+				if (startingEventArgs.Cancel)
+					return;
+
+				dragDataPackage = startingEventArgs.Data;
 			}
 		}
 
