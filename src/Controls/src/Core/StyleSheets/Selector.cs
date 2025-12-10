@@ -116,7 +116,11 @@ namespace Microsoft.Maui.Controls.StyleSheets
 			op.Left = workingRoot;
 			op.Right = sel;
 			workingRoot = op;
-			workingRootParent?.Right = workingRoot;
+
+			if (workingRootParent != null)
+			{
+				workingRootParent.Right = workingRoot;
+			}
 
 			if (updateRoot)
 				root = workingRoot;

@@ -116,13 +116,13 @@ public static partial class WebviewExtensions
 				{
 					var javascriptResult = view.RunJavascriptFinish(res);
 
-					if (javascriptResult.JsValue is not { } jsValue)
+					/*if (javascriptResult.JsValue is not { } jsValue)
 						return;
 
 					if (jsValue.IsString)
 						request.SetResult(jsValue.ToString());
 					else
-						request.SetException(new ArgumentException($"script {request.Script} is not {nameof(jsValue.IsString)}"));
+						request.SetException(new ArgumentException($"script {request.Script} is not {nameof(jsValue.IsString)}"));*/
 
 				}
 				catch (Exception exception)

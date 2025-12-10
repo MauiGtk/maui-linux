@@ -93,6 +93,18 @@ namespace Maui.Controls.Sample.Pages
 
 				return await LoadItemAsync(itemProvider, typeIdentifiers);
 			}
+#elif GTK
+
+			if (e.Data is DataPackageView packageView)
+            {
+                var fileListText = await packageView.GetTextAsync();
+				filePaths = fileListText.Split("\n").Select(x => x.Trim()).ToList();
+
+				foreach (var item in filePaths)
+				{
+					Debug.WriteLine($"Path: {item}");
+				}
+            }
 #else
 			await Task.CompletedTask;
 #endif

@@ -132,7 +132,7 @@ namespace Microsoft.Maui.Controls.Hosting
 			handlersCollection.AddHandler(typeof(Frame), typeof(Handlers.Compatibility.FrameHandler));
 			handlersCollection.AddHandler(typeof(ListView), typeof(Handlers.Compatibility.ListViewHandler));
 #endif
-#if WINDOWS || MACCATALYST
+#if WINDOWS || MACCATALYST || GTK
 			handlersCollection.AddHandler(typeof(MenuFlyout), typeof(MenuFlyoutHandler));
 #endif
 

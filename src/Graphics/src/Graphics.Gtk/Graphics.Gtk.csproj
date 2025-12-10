@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk/">
+﻿<Project Sdk="Microsoft.NET.Sdk/">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netstandard2.0;$(_MauiDotNetTfm)-gtk</TargetFrameworks>
@@ -12,8 +12,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Graphics\Graphics.csproj" />
   </ItemGroup>
-  <ItemGroup Condition="$(TargetFramework.Contains('-gtk')) != 'true'">
-    <PackageReference Include="GtkSharp" />
+  <ItemGroup Condition="$(TargetFrameworks.Contains('-gtk')) == 'True'">
+    <PackageReference Include="CairoSharp" Version="3.24.24.95" />
+    <PackageReference Include="GtkSharp" Version="3.24.24.95" />
+    <PackageReference Include="GdkSharp" Version="3.24.24.95" />
+    <PackageReference Include="PangoSharp" Version="3.24.24.95" />
   </ItemGroup>
 
 </Project>

@@ -138,7 +138,9 @@ namespace Maui.Controls.Sample.Pages
 			SelectionLabel.Text = "Selected: " + string.Join(" <- ", elements!.Select(x => x.GetType().Name));
 			var e = elements!.FirstOrDefault() as Microsoft.Maui.Controls.View;
 
-			e?.BackgroundColor = new Microsoft.Maui.Graphics.Color(255, 0, 0);
+			if(e != null){
+				e.BackgroundColor = new Microsoft.Maui.Graphics.Color(255, 0, 0);
+			}
 		}
 
 		// IWindowOverlayElement/IDrawable is implemented to show the rectangle selection lasso

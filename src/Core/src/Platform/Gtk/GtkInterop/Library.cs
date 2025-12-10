@@ -15,8 +15,8 @@ namespace Microsoft.Maui.GtkInterop
 		GdkPixbuf,
 		Gtk,
 		Fontconfig,
-		Webkit
-
+		Webkit,
+		PangoFt
 	}
 
 }
