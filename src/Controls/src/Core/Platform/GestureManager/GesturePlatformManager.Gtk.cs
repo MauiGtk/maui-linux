@@ -240,7 +240,7 @@ namespace Microsoft.Maui.Controls.Platform
 			Control = _handler.PlatformView;
 			Element = _handler.VirtualView as VisualElement;
 
-			if (_handler.ContainerView != null)
+			if (_handler.ContainerView != null && _handler.PlatformView.Events == 0)
 				Container = _handler.ContainerView;
 			else
 				Container = _handler.PlatformView;

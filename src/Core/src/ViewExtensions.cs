@@ -74,14 +74,19 @@ namespace Microsoft.Maui
 #if GTK
 			if (view != null)
 			{
+				var platformView = view.ToPlatform();
+				if (view is IContextFlyoutElement contextFlyoutElement && contextFlyoutElement.ContextFlyout != null && platformView.Events == 0)
+				{
+					return true;
+				}
+
 				var gestureRecognizers = view.GetType().GetProperty("GestureRecognizers")?.GetValue(view) as IList;
-				if (gestureRecognizers != null && gestureRecognizers.Count > 0)
+				if (gestureRecognizers != null && gestureRecognizers.Count > 0 && platformView.Events == 0)
 				{
 					return true;
 				}
 			}
 #endif
-
 			return false;
 		}
 #endif

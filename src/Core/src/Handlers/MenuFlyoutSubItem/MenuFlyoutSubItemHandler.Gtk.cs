@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Gtk;
 using PlatformView = Microsoft.Maui.Platform.MauiMenuItem;
 
 namespace Microsoft.Maui.Handlers
@@ -8,8 +9,10 @@ namespace Microsoft.Maui.Handlers
 		where TPlatformView : MauiMenuItem, new()
 		where TVirtualView : class, IList<TVirtualItem>, IElement
 		where TVirtualItem : IMenuElement
-		where TPlatformItem : Gtk.MenuItem
+		where TPlatformItem : MauiMenuItem
 	{
+		protected AccelGroup AccelGroup { get; set; } = new();
+
 		protected GtkMenuItemHandler(IPropertyMapper mapper, CommandMapper? commandMapper = null) : base(mapper, commandMapper) { }
 
 		protected override TPlatformView CreatePlatformElement()
@@ -28,6 +31,17 @@ namespace Microsoft.Maui.Handlers
 			}
 		}
 
+		protected override void ConnectHandler(TPlatformView platformView)
+		{
+			base.ConnectHandler(platformView);
+
+			if (MauiContext != null)
+			{
+				var window = MauiContext.GetPlatformWindow();
+				window.AddAccelGroup(AccelGroup);
+			}
+		}
+
 		protected override void DisconnectHandler(TPlatformView platformView)
 		{
 			if (VirtualView is not null)
@@ -43,21 +57,21 @@ namespace Microsoft.Maui.Handlers
 
 		public void Add(TVirtualItem view)
 		{
-			var platformItem = (TPlatformItem)view.ToPlatform(MauiContext!);
+			var platformItem = (MenuItem)view.ToPlatform(MauiContext!);
 			PlatformView.AppendSubItem(platformItem);
 			platformItem.Show();
 		}
 
 		public void Remove(TVirtualItem view)
 		{
-			var platformItem = (TPlatformItem)view.ToPlatform(MauiContext!);
+			var platformItem = (MenuItem)view.ToPlatform(MauiContext!);
 			PlatformView.RemoveSubItem(platformItem);
 		}
 
 
 		public void Insert(int index, TVirtualItem view)
 		{
-			var platformItem = (TPlatformItem)view.ToPlatform(MauiContext!);
+			var platformItem = (MenuItem)view.ToPlatform(MauiContext!);
 			PlatformView.InsertSubItem(platformItem, index);
 			platformItem.Show();
 		}
@@ -68,7 +82,7 @@ namespace Microsoft.Maui.Handlers
 		}
 	}
 
-	public partial class MenuFlyoutSubItemHandler : GtkMenuItemHandler<IMenuFlyoutSubItem, PlatformView, IMenuElement, Gtk.MenuItem>
+	public partial class MenuFlyoutSubItemHandler : GtkMenuItemHandler<IMenuFlyoutSubItem, PlatformView, IMenuElement, MauiMenuItem>
 	{
 		public static void MapText(IMenuFlyoutSubItemHandler handler, IMenuFlyoutSubItem view)
 		{
@@ -82,7 +96,7 @@ namespace Microsoft.Maui.Handlers
 		/// <param name="view">The view, of type IMenuFlyoutSubItem.</param>
 		public static void MapKeyboardAccelerators(IMenuFlyoutSubItemHandler handler, IMenuFlyoutSubItem view)
 		{
-			handler.PlatformView.UpdateKeyboardAccelerators(view.KeyboardAccelerators);
+			handler.PlatformView.UpdateKeyboardAccelerators(((MenuFlyoutSubItemHandler)handler).AccelGroup, view.KeyboardAccelerators);
 		}
 
 		public static void MapIsEnabled(IMenuFlyoutSubItemHandler handler, IMenuFlyoutSubItem view) =>
@@ -90,7 +104,10 @@ namespace Microsoft.Maui.Handlers
 
 		public static void MapSource(IMenuFlyoutSubItemHandler handler, IMenuFlyoutSubItem view)
 		{
-			handler.PlatformView.UpdateImageSource(view.Source);
+			if (handler.MauiContext == null)
+				return;
+
+			handler.PlatformView.UpdateImageSource(view.Source, handler.MauiContext);
 		}
 	}
 }

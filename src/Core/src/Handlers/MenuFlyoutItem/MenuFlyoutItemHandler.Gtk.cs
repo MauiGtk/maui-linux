@@ -1,10 +1,14 @@
 ﻿using System;
+using GLib;
+using Gtk;
 using PlatformView = Microsoft.Maui.Platform.MauiMenuItem;
 
 namespace Microsoft.Maui.Handlers
 {
 	public partial class MenuFlyoutItemHandler
 	{
+		protected AccelGroup AccelGroup { get; set; }
+
 		protected override PlatformView CreatePlatformElement()
 		{
 			return new();
@@ -14,8 +18,14 @@ namespace Microsoft.Maui.Handlers
 		{
 			base.ConnectHandler(PlatformView);
 			PlatformView.Activated += OnClicked;
-		}
 
+			if (MauiContext != null)
+			{
+				AccelGroup = new AccelGroup();
+				var window = MauiContext.GetPlatformWindow();
+				window.AddAccelGroup(AccelGroup);
+			}
+		}
 
 		protected override void DisconnectHandler(PlatformView platformView)
 		{
@@ -41,12 +51,15 @@ namespace Microsoft.Maui.Handlers
 
 		public static void MapKeyboardAccelerators(IMenuFlyoutItemHandler handler, IMenuFlyoutItem view)
 		{
-			handler.PlatformView.UpdateKeyboardAccelerators(view.KeyboardAccelerators);
+			handler.PlatformView.UpdateKeyboardAccelerators(((MenuFlyoutItemHandler)handler).AccelGroup, view.KeyboardAccelerators);
 		}
 
 		public static void MapSource(IMenuFlyoutItemHandler handler, IMenuFlyoutItem view)
 		{
-			handler.PlatformView.UpdateImageSource(view.Source);
+			if (handler.MauiContext == null)
+				return;
+
+			handler.PlatformView.UpdateImageSource(view.Source, handler.MauiContext);
 		}
 	}
 }
