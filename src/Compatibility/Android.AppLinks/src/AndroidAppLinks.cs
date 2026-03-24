@@ -116,9 +116,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.AppLinks
 
 			public void OnSuccess(Java.Lang.Object result)
 			{
-				if (appLink != null)
-				{
-					appLink.PropertyChanged += (sender, e) =>
+				appLink?.PropertyChanged += (sender, e) =>
 					{
 						if (e.PropertyName == AppLinkEntry.IsLinkActiveProperty.PropertyName)
 						{
@@ -132,7 +130,6 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.AppLinks
 							}
 						}
 					};
-				}
 			}
 		}
 		internal class AndroidActionFailureListener : Java.Lang.Object, IOnFailureListener

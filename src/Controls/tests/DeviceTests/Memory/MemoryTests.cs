@@ -91,8 +91,8 @@ public class MemoryTests : ControlsHandlerTestBase
 
 #if ANDROID
 		// NOTE: skip certain controls on older Android devices
-		if (type == typeof (DatePicker) && !OperatingSystem.IsAndroidVersionAtLeast(30))
-				return;
+		if (type == typeof(DatePicker) && !OperatingSystem.IsAndroidVersionAtLeast(30))
+			return;
 #endif
 
 #if IOS

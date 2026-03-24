@@ -48,14 +48,10 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 
 			if (e.NewElement != null)
 			{
-				if (BorderPropertyChanged != null)
-				{
-					BorderPropertyChanged.PropertyChanged -= BorderElementPropertyChanged;
-				}
+				BorderPropertyChanged?.PropertyChanged -= BorderElementPropertyChanged;
 				BorderElement = (IBorderElement)e.NewElement;
 
-				if (BorderPropertyChanged != null)
-					BorderPropertyChanged.PropertyChanged += BorderElementPropertyChanged;
+				BorderPropertyChanged?.PropertyChanged += BorderElementPropertyChanged;
 			}
 
 			Reset();
@@ -195,18 +191,12 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 					_defaultDrawable = null;
 					_rippleDrawable?.Dispose();
 					_rippleDrawable = null;
-					if (BorderPropertyChanged != null)
-					{
-						BorderPropertyChanged.PropertyChanged -= BorderElementPropertyChanged;
-					}
+					BorderPropertyChanged?.PropertyChanged -= BorderElementPropertyChanged;
 
 					BorderElement = null;
 
-					if (_renderer != null)
-					{
-						_renderer.ElementChanged -= OnElementChanged;
-						_renderer = null;
-					}
+					_renderer?.ElementChanged -= OnElementChanged;
+					_renderer = null;
 				}
 				_disposed = true;
 			}

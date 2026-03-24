@@ -64,20 +64,14 @@ namespace Microsoft.Maui.Controls
 			_visualElement = VisualState?.VisualStateGroup?.VisualElement;
 
 			_window = _visualElement?.Window;
-			if (_window is not null)
-			{
-				_window.SizeChanged += OnWindowSizeChanged;
-			}
+			_window?.SizeChanged += OnWindowSizeChanged;
 		}
 
 		void DetachEvents()
 		{
 			_visualElement = null;
 
-			if (_window is not null)
-			{
-				_window.SizeChanged -= OnWindowSizeChanged;
-			}
+			_window?.SizeChanged -= OnWindowSizeChanged;
 			_window = null;
 		}
 

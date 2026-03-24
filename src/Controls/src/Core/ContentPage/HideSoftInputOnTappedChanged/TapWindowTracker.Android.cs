@@ -27,17 +27,11 @@ namespace Microsoft.Maui.Controls
 		{
 			SetupFocus(false);
 
-			if (_platformView != null)
-			{
-				_platformView.FocusChange -= OnFocusChanged;
-				_platformView = null;
-			}
+			_platformView?.FocusChange -= OnFocusChanged;
+			_platformView = null;
 
-			if (_hideSoftInputOnTappedChangedManager is not null)
-			{
-				_hideSoftInputOnTappedChangedManager.DispatchTouchEvent -= OnDispatchTouchEvent;
-				_hideSoftInputOnTappedChangedManager = null;
-			}
+			_hideSoftInputOnTappedChangedManager?.DispatchTouchEvent -= OnDispatchTouchEvent;
+			_hideSoftInputOnTappedChangedManager = null;
 		}
 
 		void OnFocusChanged(object? sender, AView.FocusChangeEventArgs e) =>

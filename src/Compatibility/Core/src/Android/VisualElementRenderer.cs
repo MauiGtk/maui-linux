@@ -139,10 +139,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 
 			Performance.Start(out string reference);
 
-			if (oldElement != null)
-			{
-				oldElement.PropertyChanged -= _propertyChangeHandler;
-			}
+			oldElement?.PropertyChanged -= _propertyChangeHandler;
 
 			Color currentColor = oldElement?.BackgroundColor ?? null;
 
@@ -212,22 +209,13 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 
 				EffectUtilities.UnregisterEffectControlProvider(this, Element);
 
-				if (Element != null)
-				{
-					Element.PropertyChanged -= _propertyChangeHandler;
-				}
+				Element?.PropertyChanged -= _propertyChangeHandler;
 
-				if (Tracker != null)
-				{
-					Tracker.Dispose();
-					Tracker = null;
-				}
+				Tracker?.Dispose();
+				Tracker = null;
 
-				if (_packager != null)
-				{
-					_packager.Dispose();
-					_packager = null;
-				}
+				_packager?.Dispose();
+				_packager = null;
 
 				if (ManageNativeControlLifetime)
 				{

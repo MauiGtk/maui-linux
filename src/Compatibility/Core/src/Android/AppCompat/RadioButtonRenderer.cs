@@ -83,10 +83,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 
 			Performance.Start(out string reference);
 
-			if (oldElement != null)
-			{
-				oldElement.PropertyChanged -= OnElementPropertyChanged;
-			}
+			oldElement?.PropertyChanged -= OnElementPropertyChanged;
 
 			element.PropertyChanged += OnElementPropertyChanged;
 
@@ -140,10 +137,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 				OnFocusChangeListener = null;
 				SetOnCheckedChangeListener(null);
 
-				if (Element != null)
-				{
-					Element.PropertyChanged -= OnElementPropertyChanged;
-				}
+				Element?.PropertyChanged -= OnElementPropertyChanged;
 
 				_automationPropertiesProvider?.Dispose();
 				_tracker?.Dispose();

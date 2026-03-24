@@ -25,8 +25,7 @@ namespace Microsoft.Maui.Handlers
 		protected override void ConnectHandler(View platformView)
 		{
 			AppCompatRadioButton? platformRadioButton = GetPlatformRadioButton(this);
-			if (platformRadioButton != null)
-				platformRadioButton.CheckedChange += OnCheckChanged;
+			platformRadioButton?.CheckedChange += OnCheckChanged;
 		}
 
 		protected override void DisconnectHandler(View platformView)

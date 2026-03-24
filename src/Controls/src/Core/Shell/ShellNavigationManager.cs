@@ -221,14 +221,12 @@ namespace Microsoft.Maui.Controls
 				_shell.PropertyChanged += WaitForWindowToSet;
 				var shellContent = _shell?.CurrentItem?.CurrentItem?.CurrentItem;
 
-				if (shellContent != null)
-					shellContent.ChildAdded += WaitForWindowToSet;
+				shellContent?.ChildAdded += WaitForWindowToSet;
 
 				_waitingForWindow = new ActionDisposable(() =>
 				{
 					_shell.PropertyChanged -= WaitForWindowToSet;
-					if (shellContent != null)
-						shellContent.ChildAdded -= WaitForWindowToSet;
+					shellContent?.ChildAdded -= WaitForWindowToSet;
 				});
 
 				void WaitForWindowToSet(object sender, EventArgs e)

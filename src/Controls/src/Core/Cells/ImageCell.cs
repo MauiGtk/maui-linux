@@ -54,8 +54,7 @@ namespace Microsoft.Maui.Controls
 
 		void OnSourcePropertyChanging(ImageSource oldvalue, ImageSource newvalue)
 		{
-			if (oldvalue != null)
-				oldvalue.SourceChanged -= OnSourceChanged;
+			oldvalue?.SourceChanged -= OnSourceChanged;
 		}
 	}
 }

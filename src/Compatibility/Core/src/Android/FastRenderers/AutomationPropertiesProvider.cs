@@ -41,10 +41,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.FastRenderers
 
 			_disposed = true;
 
-			if (Element != null)
-			{
-				Element.PropertyChanged -= OnElementPropertyChanged;
-			}
+			Element?.PropertyChanged -= OnElementPropertyChanged;
 
 			if (_renderer != null)
 			{
@@ -76,15 +73,9 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.FastRenderers
 
 		void OnElementChanged(object sender, VisualElementChangedEventArgs e)
 		{
-			if (e.OldElement != null)
-			{
-				e.OldElement.PropertyChanged -= OnElementPropertyChanged;
-			}
+			e.OldElement?.PropertyChanged -= OnElementPropertyChanged;
 
-			if (e.NewElement != null)
-			{
-				e.NewElement.PropertyChanged += OnElementPropertyChanged;
-			}
+			e.NewElement?.PropertyChanged += OnElementPropertyChanged;
 
 			SetupDefaults();
 			Controls.Platform.AutomationPropertiesProvider.AccessibilitySettingsChanged(Control, Element, _defaultHint, _defaultContentDescription);

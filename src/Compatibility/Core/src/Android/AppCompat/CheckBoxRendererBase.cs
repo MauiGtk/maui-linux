@@ -112,10 +112,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 
 			Performance.Start(out string reference);
 
-			if (oldElement != null)
-			{
-				oldElement.PropertyChanged -= OnElementPropertyChanged;
-			}
+			oldElement?.PropertyChanged -= OnElementPropertyChanged;
 
 			element.PropertyChanged += OnElementPropertyChanged;
 

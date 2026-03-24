@@ -260,11 +260,8 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 				if (!this.IsDisposed())
 					RemoveDrawerListener(this);
 
-				if (_tracker != null)
-				{
-					_tracker.Dispose();
-					_tracker = null;
-				}
+				_tracker?.Dispose();
+				_tracker = null;
 
 				if (_detailLayout != null)
 				{
@@ -280,11 +277,8 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 					_flyoutLayout = null;
 				}
 
-				if (Element != null)
-				{
-					Element.ClearValue(Microsoft.Maui.Controls.Compatibility.Platform.Android.Platform.RendererProperty);
-					Element = null;
-				}
+				Element?.ClearValue(Microsoft.Maui.Controls.Compatibility.Platform.Android.Platform.RendererProperty);
+				Element = null;
 			}
 
 			base.Dispose(disposing);
@@ -475,13 +469,11 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 				if (_flyoutLayout == null || _flyoutLayout.IsDisposed())
 					return;
 
-				if (_flyoutLayout.ChildView != null)
-					_flyoutLayout.ChildView.PropertyChanged -= HandleFlyoutPropertyChanged;
+				_flyoutLayout.ChildView?.PropertyChanged -= HandleFlyoutPropertyChanged;
 
 				_flyoutLayout.ChildView = Element.Flyout;
 
-				if (_flyoutLayout.ChildView != null)
-					_flyoutLayout.ChildView.PropertyChanged += HandleFlyoutPropertyChanged;
+				_flyoutLayout.ChildView?.PropertyChanged += HandleFlyoutPropertyChanged;
 			}
 		}
 

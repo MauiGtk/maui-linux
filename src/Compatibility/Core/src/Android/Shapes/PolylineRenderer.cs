@@ -50,18 +50,14 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 
 			if (disposing)
 			{
-				if (_points != null)
-				{
-					_points.CollectionChanged -= OnCollectionChanged;
-					_points = null;
-				}
+				_points?.CollectionChanged -= OnCollectionChanged;
+				_points = null;
 			}
 		}
 
 		void UpdatePoints()
 		{
-			if (_points != null)
-				_points.CollectionChanged -= OnCollectionChanged;
+			_points?.CollectionChanged -= OnCollectionChanged;
 
 			_points = Element.Points;
 

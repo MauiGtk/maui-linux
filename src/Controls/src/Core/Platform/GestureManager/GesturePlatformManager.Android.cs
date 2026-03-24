@@ -222,8 +222,7 @@ namespace Microsoft.Maui.Controls.Platform
 			if (_disposed)
 			{
 				var platformView = Control;
-				if (platformView != null)
-					platformView.Touch -= OnPlatformViewTouched;
+				platformView?.Touch -= OnPlatformViewTouched;
 
 				return;
 			}
@@ -235,8 +234,7 @@ namespace Microsoft.Maui.Controls.Platform
 		void SetupElement(VisualElement? oldElement, VisualElement? newElement)
 		{
 			var platformView = Control;
-			if (platformView != null)
-				platformView.Touch -= OnPlatformViewTouched;
+			platformView?.Touch -= OnPlatformViewTouched;
 
 			_handler = null;
 			if (oldElement != null)

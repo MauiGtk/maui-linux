@@ -114,34 +114,19 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.FastRenderers
 
 			if (disposing)
 			{
-				if (Element != null)
-				{
-					Element.PropertyChanged -= OnElementPropertyChanged;
-				}
+				Element?.PropertyChanged -= OnElementPropertyChanged;
 
-				if (_visualElementTracker != null)
-				{
-					_visualElementTracker.Dispose();
-					_visualElementTracker = null;
-				}
+				_visualElementTracker?.Dispose();
+				_visualElementTracker = null;
 
-				if (_visualElementPackager != null)
-				{
-					_visualElementPackager.Dispose();
-					_visualElementPackager = null;
-				}
+				_visualElementPackager?.Dispose();
+				_visualElementPackager = null;
 
-				if (_backgroundDrawable != null)
-				{
-					_backgroundDrawable.Dispose();
-					_backgroundDrawable = null;
-				}
+				_backgroundDrawable?.Dispose();
+				_backgroundDrawable = null;
 
-				if (_visualElementRenderer != null)
-				{
-					_visualElementRenderer.Dispose();
-					_visualElementRenderer = null;
-				}
+				_visualElementRenderer?.Dispose();
+				_visualElementRenderer = null;
 
 				while (ChildCount > 0)
 				{
@@ -164,10 +149,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.FastRenderers
 		{
 			ElementChanged?.Invoke(this, new VisualElementChangedEventArgs(e.OldElement, e.NewElement));
 
-			if (e.OldElement != null)
-			{
-				e.OldElement.PropertyChanged -= OnElementPropertyChanged;
-			}
+			e.OldElement?.PropertyChanged -= OnElementPropertyChanged;
 
 			if (e.NewElement != null)
 			{

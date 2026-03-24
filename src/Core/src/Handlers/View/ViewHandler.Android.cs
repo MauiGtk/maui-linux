@@ -9,10 +9,7 @@ namespace Microsoft.Maui.Handlers
 	{
 		partial void ConnectingHandler(PlatformView? platformView)
 		{
-			if (platformView != null)
-			{
-				platformView.FocusChange += OnPlatformViewFocusChange;
-			}
+			platformView?.FocusChange += OnPlatformViewFocusChange;
 		}
 
 		partial void DisconnectingHandler(PlatformView platformView)

@@ -66,8 +66,7 @@ namespace Microsoft.Maui.Handlers
 
 			DisconnectHandler(_rootManager);
 
-			if (_rootManager != null)
-				_rootManager.RootViewChanged -= OnRootViewChanged;
+			_rootManager?.RootViewChanged -= OnRootViewChanged;
 		}
 
 		void OnRootViewChanged(object? sender, EventArgs e)

@@ -98,9 +98,9 @@ namespace Microsoft.Maui.Handlers
 				else
 					OnClick(PlatformView, EventArgs.Empty);
 			}
-			else if (_dialog != null)
+			else
 			{
-				_dialog.Hide();
+				_dialog?.Hide();
 				_dialog = null;
 			}
 		}

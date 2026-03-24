@@ -60,8 +60,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.AppCompat
 			{
 				_disposed = true;
 
-				if (Element != null)
-					Element.Toggled -= HandleToggled;
+				Element?.Toggled -= HandleToggled;
 
 				Control?.SetOnCheckedChangeListener(null);
 
@@ -76,8 +75,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.AppCompat
 		{
 			base.OnElementChanged(e);
 
-			if (e.OldElement != null)
-				e.OldElement.Toggled -= HandleToggled;
+			e.OldElement?.Toggled -= HandleToggled;
 
 			if (e.NewElement != null)
 			{

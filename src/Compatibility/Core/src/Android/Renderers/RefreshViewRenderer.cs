@@ -80,8 +80,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 		{
 			var oldElement = Element;
 
-			if (oldElement != null)
-				oldElement.PropertyChanged -= HandlePropertyChanged;
+			oldElement?.PropertyChanged -= HandlePropertyChanged;
 
 			Element = element;
 
@@ -230,10 +229,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 
 			if (disposing)
 			{
-				if (Element != null)
-				{
-					Element.PropertyChanged -= HandlePropertyChanged;
-				}
+				Element?.PropertyChanged -= HandlePropertyChanged;
 
 				SetOnRefreshListener(null);
 

@@ -36,25 +36,16 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.FastRenderers
 
 			if (disposing)
 			{
-				if (_element != null)
-				{
-					_element.PropertyChanged -= OnElementPropertyChanged;
-				}
+				_element?.PropertyChanged -= OnElementPropertyChanged;
 
 				ImageElementManager.Dispose(this);
 				BackgroundManager.Dispose(this);
 
-				if (_visualElementTracker != null)
-				{
-					_visualElementTracker.Dispose();
-					_visualElementTracker = null;
-				}
+				_visualElementTracker?.Dispose();
+				_visualElementTracker = null;
 
-				if (_visualElementRenderer != null)
-				{
-					_visualElementRenderer.Dispose();
-					_visualElementRenderer = null;
-				}
+				_visualElementRenderer?.Dispose();
+				_visualElementRenderer = null;
 
 				if (_element != null)
 				{
@@ -136,8 +127,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.FastRenderers
 
 			Performance.Start(out string reference);
 
-			if (oldElement != null)
-				oldElement.PropertyChanged -= OnElementPropertyChanged;
+			oldElement?.PropertyChanged -= OnElementPropertyChanged;
 
 			element.PropertyChanged += OnElementPropertyChanged;
 
@@ -186,12 +176,10 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.FastRenderers
 		void IImageRendererController.SkipInvalidate() => _skipInvalidate = true;
 		void IImageRendererController.SetFormsAnimationDrawable(IFormsAnimationDrawable value)
 		{
-			if (_formsAnimationDrawable != null)
-				_formsAnimationDrawable.AnimationStopped -= OnAnimationStopped;
+			_formsAnimationDrawable?.AnimationStopped -= OnAnimationStopped;
 
 			_formsAnimationDrawable = value;
-			if (_formsAnimationDrawable != null)
-				_formsAnimationDrawable.AnimationStopped += OnAnimationStopped;
+			_formsAnimationDrawable?.AnimationStopped += OnAnimationStopped;
 		}
 
 		bool ILayoutChanges.HasLayoutOccurred => _hasLayoutOccurred;

@@ -328,10 +328,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 			UpdateVerticalScrollBarVisibility();
 
 			// Keep track of the ItemsLayout's property changes
-			if (ItemsLayout != null)
-			{
-				ItemsLayout.PropertyChanged += LayoutPropertyChanged;
-			}
+			ItemsLayout?.PropertyChanged += LayoutPropertyChanged;
 
 			// Listen for ScrollTo requests
 			ItemsView.ScrollToRequested += ScrollToRequested;
@@ -384,10 +381,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 			}
 
 			// Stop listening for layout property changes
-			if (ItemsLayout != null)
-			{
-				ItemsLayout.PropertyChanged -= LayoutPropertyChanged;
-			}
+			ItemsLayout?.PropertyChanged -= LayoutPropertyChanged;
 
 			// Stop listening for property changes
 			oldElement.PropertyChanged -= OnElementPropertyChanged;
@@ -410,11 +404,8 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 				ItemsViewAdapter?.Dispose();
 			}
 
-			if (_snapManager != null)
-			{
-				_snapManager.Dispose();
-				_snapManager = null;
-			}
+			_snapManager?.Dispose();
+			_snapManager = null;
 
 			if (_itemDecoration != null)
 			{

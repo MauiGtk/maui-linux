@@ -176,8 +176,7 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 			{
 				_globalLayoutListener.Invalidate();
 
-				if (_backButtonBehavior != null)
-					_backButtonBehavior.PropertyChanged -= OnBackButtonBehaviorChanged;
+				_backButtonBehavior?.PropertyChanged -= OnBackButtonBehaviorChanged;
 
 				((IShellController)ShellContext.Shell)?.RemoveFlyoutBehaviorObserver(this);
 				ShellContext.Shell.Toolbar.PropertyChanged -= OnToolbarPropertyChanged;
@@ -235,8 +234,7 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 		{
 			if (oldPage != null)
 			{
-				if (_backButtonBehavior != null)
-					_backButtonBehavior.PropertyChanged -= OnBackButtonBehaviorChanged;
+				_backButtonBehavior?.PropertyChanged -= OnBackButtonBehaviorChanged;
 
 				oldPage.PropertyChanged -= OnPagePropertyChanged;
 				((INotifyCollectionChanged)oldPage.ToolbarItems).CollectionChanged -= OnPageToolbarItemsChanged;
@@ -247,8 +245,7 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 				newPage.PropertyChanged += OnPagePropertyChanged;
 				_backButtonBehavior = Shell.GetBackButtonBehavior(newPage);
 
-				if (_backButtonBehavior != null)
-					_backButtonBehavior.PropertyChanged += OnBackButtonBehaviorChanged;
+				_backButtonBehavior?.PropertyChanged += OnBackButtonBehaviorChanged;
 
 				((INotifyCollectionChanged)newPage.ToolbarItems).CollectionChanged += OnPageToolbarItemsChanged;
 
@@ -295,14 +292,12 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 			{
 				var backButtonHandler = Shell.GetBackButtonBehavior(Page);
 
-				if (_backButtonBehavior != null)
-					_backButtonBehavior.PropertyChanged -= OnBackButtonBehaviorChanged;
+				_backButtonBehavior?.PropertyChanged -= OnBackButtonBehaviorChanged;
 
 				UpdateLeftBarButtonItem();
 
 				_backButtonBehavior = backButtonHandler;
-				if (_backButtonBehavior != null)
-					_backButtonBehavior.PropertyChanged += OnBackButtonBehaviorChanged;
+				_backButtonBehavior?.PropertyChanged += OnBackButtonBehaviorChanged;
 			}
 			else if (e.PropertyName == Shell.TitleViewProperty.PropertyName)
 				UpdateTitleView();
@@ -327,15 +322,9 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 
 		protected virtual void OnSearchHandlerChanged(SearchHandler oldValue, SearchHandler newValue)
 		{
-			if (oldValue != null)
-			{
-				oldValue.PropertyChanged -= OnSearchHandlerPropertyChanged;
-			}
+			oldValue?.PropertyChanged -= OnSearchHandlerPropertyChanged;
 
-			if (newValue != null)
-			{
-				newValue.PropertyChanged += OnSearchHandlerPropertyChanged;
-			}
+			newValue?.PropertyChanged += OnSearchHandlerPropertyChanged;
 		}
 
 		protected virtual void OnSearchHandlerPropertyChanged(object sender, PropertyChangedEventArgs e)

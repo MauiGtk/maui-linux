@@ -218,10 +218,7 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 
 			if (disposing)
 			{
-				if (_searchHandler != null)
-				{
-					_searchHandler.PropertyChanged -= SearchHandlerPropertyChanged;
-				}
+				_searchHandler?.PropertyChanged -= SearchHandlerPropertyChanged;
 				_searchHandler = null;
 				_control = null;
 			}

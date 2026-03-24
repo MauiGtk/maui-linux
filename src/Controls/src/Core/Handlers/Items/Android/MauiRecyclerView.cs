@@ -86,11 +86,8 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 				ItemsViewAdapter?.Dispose();
 			}
 
-			if (_snapManager != null)
-			{
-				_snapManager.Dispose();
-				_snapManager = null;
-			}
+			_snapManager?.Dispose();
+			_snapManager = null;
 
 			if (_itemDecoration != null)
 			{
@@ -104,11 +101,8 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 				_itemTouchHelper = null;
 			}
 
-			if (_itemTouchHelperCallback != null)
-			{
-				_itemTouchHelperCallback.Dispose();
-				_itemTouchHelperCallback = null;
-			}
+			_itemTouchHelperCallback?.Dispose();
+			_itemTouchHelperCallback = null;
 		}
 
 		public virtual void SetUpNewElement(TItemsView newElement)
@@ -278,11 +272,9 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 					_itemTouchHelper.Dispose();
 					_itemTouchHelper = null;
 				}
-				if (_itemTouchHelperCallback != null)
-				{
-					_itemTouchHelperCallback.Dispose();
-					_itemTouchHelperCallback = null;
-				}
+
+				_itemTouchHelperCallback?.Dispose();
+				_itemTouchHelperCallback = null;
 			}
 		}
 

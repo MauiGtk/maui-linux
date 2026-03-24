@@ -24,10 +24,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 			renderer.ElementPropertyChanged -= OnElementPropertyChanged;
 			renderer.ElementChanged -= OnElementChanged;
 
-			if (renderer.Element != null)
-			{
-				renderer.Element.PropertyChanged -= OnElementPropertyChanged;
-			}
+			renderer.Element?.PropertyChanged -= OnElementPropertyChanged;
 		}
 
 		static void UpdateBackgroundColor(AView Control, VisualElement Element, Color color = null)
@@ -55,10 +52,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 		static void OnElementChanged(object sender, VisualElementChangedEventArgs e)
 		{
 			Performance.Start(out string reference);
-			if (e.OldElement != null)
-			{
-				e.OldElement.PropertyChanged -= OnElementPropertyChanged;
-			}
+			e.OldElement?.PropertyChanged -= OnElementPropertyChanged;
 
 			if (e.NewElement != null)
 			{

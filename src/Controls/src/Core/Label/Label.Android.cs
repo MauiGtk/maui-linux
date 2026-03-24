@@ -25,11 +25,8 @@ namespace Microsoft.Maui.Controls
 			}
 			else
 			{
-				if (_mauiTextView != null)
-				{
-					_mauiTextView.LayoutChanged -= OnLayoutChanged;
-					_mauiTextView = null;
-				}
+				_mauiTextView?.LayoutChanged -= OnLayoutChanged;
+				_mauiTextView = null;
 			}
 		}
 

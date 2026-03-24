@@ -74,11 +74,8 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 				_carouselViewLoopManager?.SetItemsSource(null);
 				_carouselViewLoopManager = null;
 
-				if (_itemDecoration != null)
-				{
-					_itemDecoration.Dispose();
-					_itemDecoration = null;
-				}
+				_itemDecoration?.Dispose();
+				_itemDecoration = null;
 
 				ClearLayoutListener();
 			}
@@ -101,8 +98,7 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 
 		public override void TearDownOldElement(CarouselView oldElement)
 		{
-			if (ItemsView != null)
-				ItemsView.Scrolled -= CarouselViewScrolled;
+			ItemsView?.Scrolled -= CarouselViewScrolled;
 
 			ClearLayoutListener();
 			base.TearDownOldElement(oldElement);

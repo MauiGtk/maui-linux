@@ -262,14 +262,10 @@ namespace Microsoft.Maui.Controls
 		void OnItemsSourceChanged(IList oldValue, IList newValue)
 		{
 			var oldObservable = oldValue as INotifyCollectionChanged;
-			if (oldObservable != null)
-				oldObservable.CollectionChanged -= CollectionChanged;
+			oldObservable?.CollectionChanged -= CollectionChanged;
 
 			var newObservable = newValue as INotifyCollectionChanged;
-			if (newObservable != null)
-			{
-				newObservable.CollectionChanged += CollectionChanged;
-			}
+			newObservable?.CollectionChanged += CollectionChanged;
 
 			if (newValue != null)
 			{

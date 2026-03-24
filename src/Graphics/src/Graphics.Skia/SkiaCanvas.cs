@@ -693,22 +693,16 @@ namespace Microsoft.Maui.Graphics.Skia
 		{
 			base.ResetState();
 
-			if (_shader != null)
-			{
-				_shader.Dispose();
-				_shader = null;
-			}
+			_shader?.Dispose();
+			_shader = null;
 
 			_stateService.Reset(CurrentState);
 		}
 
 		public override bool RestoreState()
 		{
-			if (_shader != null)
-			{
-				_shader.Dispose();
-				_shader = null;
-			}
+			_shader?.Dispose();
+			_shader = null;
 
 			return base.RestoreState();
 		}

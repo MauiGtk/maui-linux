@@ -75,10 +75,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 				{
 					if (_renderer != null)
 					{
-						if (_element != null)
-						{
-							_element.PropertyChanged -= OnElementPropertyChanged;
-						}
+						_element?.PropertyChanged -= OnElementPropertyChanged;
 
 						_renderer.ElementChanged -= OnElementChanged;
 						_renderer = null;
@@ -200,11 +197,8 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 
 		void OnElementChanged(object sender, VisualElementChangedEventArgs e)
 		{
-			if (_element != null)
-			{
-				_element.PropertyChanged -= OnElementPropertyChanged;
-				_element = null;
-			}
+			_element?.PropertyChanged -= OnElementPropertyChanged;
+			_element = null;
 
 			if (e.NewElement is Button button)
 			{

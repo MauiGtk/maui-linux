@@ -165,11 +165,9 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 			if (_focusChangeHandler == null)
 				_focusChangeHandler = OnFocusChangeRequested;
 
-			if (e.OldElement != null)
-				e.OldElement.FocusChangeRequested -= _focusChangeHandler;
+			e.OldElement?.FocusChangeRequested -= _focusChangeHandler;
 
-			if (e.NewElement != null)
-				e.NewElement.FocusChangeRequested += _focusChangeHandler;
+			e.NewElement?.FocusChangeRequested += _focusChangeHandler;
 		}
 
 		protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)

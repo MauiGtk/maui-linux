@@ -397,8 +397,7 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 		{
 			ShellController?.RemoveAppearanceObserver(this);
 
-			if (Shell != null)
-				Shell.PropertyChanged -= OnShellPropertyChanged;
+			Shell?.PropertyChanged -= OnShellPropertyChanged;
 
 			if (this.IsAlive())
 			{

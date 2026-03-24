@@ -61,10 +61,7 @@ namespace Microsoft.Maui.Controls.Foldable
 
 		void OnLayoutHandlerChanged(object sender, EventArgs e)
 		{
-			if (_dualScreenService != null)
-			{
-				_dualScreenService.OnLayoutChanged -= OnDualScreenServiceChanged;
-			}
+			_dualScreenService?.OnLayoutChanged -= OnDualScreenServiceChanged;
 
 			if (_layout.Handler != null)
 			{

@@ -57,13 +57,11 @@ namespace Microsoft.Maui.Controls
 
 			if (_currentPage != currentPage)
 			{
-				if (_currentPage != null)
-					_currentPage.PropertyChanged -= OnCurrentPagePropertyChanged;
+				_currentPage?.PropertyChanged -= OnCurrentPagePropertyChanged;
 
 				_currentPage = currentPage;
 
-				if (_currentPage != null)
-					_currentPage.PropertyChanged += OnCurrentPagePropertyChanged;
+				_currentPage?.PropertyChanged += OnCurrentPagePropertyChanged;
 			}
 
 			if (currentPage == null)
@@ -133,13 +131,11 @@ namespace Microsoft.Maui.Controls
 			if (bbb == _backButtonBehavior)
 				return;
 
-			if (_backButtonBehavior != null)
-				_backButtonBehavior.PropertyChanged -= OnBackButtonCommandPropertyChanged;
+			_backButtonBehavior?.PropertyChanged -= OnBackButtonCommandPropertyChanged;
 
 			_backButtonBehavior = bbb;
 
-			if (_backButtonBehavior != null)
-				_backButtonBehavior.PropertyChanged += OnBackButtonCommandPropertyChanged;
+			_backButtonBehavior?.PropertyChanged += OnBackButtonCommandPropertyChanged;
 		}
 
 		void OnBackButtonCommandPropertyChanged(object? sender, PropertyChangedEventArgs e)

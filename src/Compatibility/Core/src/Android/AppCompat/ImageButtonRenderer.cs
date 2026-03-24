@@ -92,10 +92,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 
 			if (disposing)
 			{
-				if (Element != null)
-				{
-					Element.PropertyChanged -= OnElementPropertyChanged;
-				}
+				Element?.PropertyChanged -= OnElementPropertyChanged;
 
 				SetOnClickListener(null);
 				SetOnTouchListener(null);
@@ -167,10 +164,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 
 			Performance.Start(out string reference);
 
-			if (oldElement != null)
-			{
-				oldElement.PropertyChanged -= OnElementPropertyChanged;
-			}
+			oldElement?.PropertyChanged -= OnElementPropertyChanged;
 
 			element.PropertyChanged += OnElementPropertyChanged;
 

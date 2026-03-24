@@ -1161,15 +1161,13 @@ namespace Microsoft.Maui.Controls
 			Navigated?.Invoke(this, args);
 			OnNavigated(args);
 
-			if (_previousPage != null)
-				_previousPage.PropertyChanged -= OnCurrentPagePropertyChanged;
+			_previousPage?.PropertyChanged -= OnCurrentPagePropertyChanged;
 
 			_previousPage?.SendNavigatedFrom(new NavigatedFromEventArgs(CurrentPage));
 			CurrentPage?.SendNavigatedTo(new NavigatedToEventArgs(_previousPage));
 			_previousPage = null;
 
-			if (CurrentPage != null)
-				CurrentPage.PropertyChanged += OnCurrentPagePropertyChanged;
+			CurrentPage?.PropertyChanged += OnCurrentPagePropertyChanged;
 
 			CurrentItem?.Handler?.UpdateValue(Shell.TabBarIsVisibleProperty.PropertyName);
 		}

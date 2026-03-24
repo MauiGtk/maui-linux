@@ -96,10 +96,7 @@ namespace Microsoft.Maui.Controls
 
 		void OnCommandChanged(ICommand oldCommand, ICommand newCommand)
 		{
-			if (oldCommand != null)
-			{
-				oldCommand.CanExecuteChanged -= CanExecuteChanged;
-			}
+			oldCommand?.CanExecuteChanged -= CanExecuteChanged;
 
 			if (newCommand != null)
 			{

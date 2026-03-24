@@ -169,10 +169,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.FastRenderers
 				RemoveOnAttachStateChangeListener(this);
 				OnFocusChangeListener = null;
 
-				if (Element != null)
-				{
-					Element.PropertyChanged -= OnElementPropertyChanged;
-				}
+				Element?.PropertyChanged -= OnElementPropertyChanged;
 
 				_automationPropertiesProvider?.Dispose();
 				_tracker?.Dispose();
@@ -204,10 +201,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.FastRenderers
 		{
 			ElementChanged?.Invoke(this, new VisualElementChangedEventArgs(e.OldElement, e.NewElement));
 
-			if (e.OldElement != null)
-			{
-				e.OldElement.PropertyChanged -= OnElementPropertyChanged;
-			}
+			e.OldElement?.PropertyChanged -= OnElementPropertyChanged;
 
 			if (e.NewElement != null && !_isDisposed)
 			{

@@ -38,11 +38,8 @@ namespace Microsoft.Maui.Platform
 
 			_invalidateShadow = true;
 
-			if (_shadowBitmap != null)
-			{
-				_shadowBitmap.Recycle();
-				_shadowBitmap = null;
-			}
+			_shadowBitmap?.Recycle();
+			_shadowBitmap = null;
 		}
 
 		protected override void OnLayout(bool changed, int left, int top, int right, int bottom)

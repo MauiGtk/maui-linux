@@ -182,11 +182,8 @@ namespace Microsoft.Maui.Controls.Handlers.Compatibility
 				// Unhook the adapter from the ListView before disposing of it
 				Control?.Adapter = null;
 
-				if (_adapter != null)
-				{
-					_adapter.Dispose();
-					_adapter = null;
-				}
+				_adapter?.Dispose();
+				_adapter = null;
 			}
 
 

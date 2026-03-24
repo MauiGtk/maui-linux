@@ -54,8 +54,7 @@ namespace Microsoft.Maui
 
 			var measuredHeight = _nativeLayer.MeasuredHeight;
 
-			if (_nativeActivity.Window != null)
-				_nativeActivity.Window.DecorView.LayoutChange += DecorViewLayoutChange;
+			_nativeActivity.Window?.DecorView.LayoutChange += DecorViewLayoutChange;
 
 			_graphicsView = new PlatformGraphicsView(_nativeLayer.Context, this);
 			if (_graphicsView == null)

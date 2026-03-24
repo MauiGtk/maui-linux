@@ -70,23 +70,14 @@ namespace Microsoft.Maui.Graphics.Skia
 
 		public override void Dispose()
 		{
-			if (_skiaCanvas != null)
-			{
-				_skiaCanvas.Dispose();
-				_skiaCanvas = null;
-			}
+			_skiaCanvas?.Dispose();
+			_skiaCanvas = null;
 
-			if (_surface != null)
-			{
-				_surface.Dispose();
-				_surface = null;
-			}
+			_surface?.Dispose();
+			_surface = null;
 
-			if (_image != null)
-			{
-				_image.Dispose();
-				_image = null;
-			}
+			_image?.Dispose();
+			_image = null;
 
 			if (_bitmap != null && _disposeBitmap)
 			{
